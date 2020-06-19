@@ -1,0 +1,21 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pingfederate
+  labels:
+    app: pingfederate
+    tier: engine
+spec:
+  ports:
+    #NOTE: external port is 443 now
+  - port: 443
+    protocol: TCP
+    targetPort: 9031
+    name: runtime
+  - port: 9273
+    name: telegraf
+  selector:
+    app: pingfederate
+    tier: engine
+  sessionAffinity: None
+  # type: LoadBalancer

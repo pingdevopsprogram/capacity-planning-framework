@@ -1,0 +1,52 @@
+{ "campaignName":"sample-campaign",
+  "testDuration":"50",
+  "cooldown": "20",
+  "namespace":"${PING_IDENTITY_K8S_NAMESPACE}",
+  "dashboardUrl": "https://grafana-${PING_IDENTITY_DEVOPS_DNS_ZONE}/d/pingperf",
+  "serverProfileUrl":"https://github.com/ping-devops-program/capacity-planning-framework",
+  "serverProfilePath":"generate-load/jmeter-jmx",
+  "testPath":"/opt/out/instance/bin/ping-perf-framework.jmx",
+  "influxdbHost":"influx-influxdb",
+  "tests":[
+    { "id": "1tSearchrateadmin",
+      "threadgroups": [
+        { "name":"searchrateadmin",
+          "vars":
+            { "threads": "1",
+              "replicas": "1",
+              "heap": "1800mm",
+              "cpus": "1",
+              "mem": "2Gi"
+            }
+        }
+      ]
+    },
+    { "id": "1tModrateadmin",
+      "threadgroups": [
+        { "name":"modrateadmin",
+          "vars":
+            { "threads": "1",
+              "replicas": "1",
+              "heap": "1800mm",
+              "cpus": "1",
+              "mem": "2Gi"
+            }
+        }
+      ]
+    },
+    { "id": "1tModrateadmin",
+      "threadgroups": [
+        { "name":"modrateadmin",
+          "vars":
+            { "threads": "1",
+              "replicas": "1",
+              "heap": "1800mm",
+              "cpus": "1",
+              "mem": "2Gi"
+            }
+        }
+      ]
+    }
+    
+  ]
+}

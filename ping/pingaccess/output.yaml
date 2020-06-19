@@ -1,0 +1,199 @@
+apiVersion: v1
+data:
+  OPERATIONAL_MODE: CLUSTERED_CONSOLE
+  PA_CONSOLE_HOST: pingaccess-admin
+  PING_IDENTITY_ACCEPT_EULA: "YES"
+  SERVER_PROFILE_PATH: pa-clustering/pingaccess
+  SERVER_PROFILE_URL: https://www.github.com/pingidentity/pingidentity-server-profiles.git
+kind: ConfigMap
+metadata:
+  labels:
+    role: pingaccess
+  name: pingaccess-admin-environment-variables
+---
+apiVersion: v1
+data:
+  OPERATIONAL_MODE: CLUSTERED_ENGINE
+  PA_CONSOLE_HOST: pingaccess-admin
+  PING_IDENTITY_ACCEPT_EULA: "YES"
+  SERVER_PROFILE_PATH: pa-clustering/pingaccess
+  SERVER_PROFILE_URL: https://www.github.com/pingidentity/pingidentity-server-profiles.git
+kind: ConfigMap
+metadata:
+  labels:
+    role: pingaccess
+  name: pingaccess-engine-environment-variables
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    role: pingaccess
+    tier: engine
+  name: pingaccess
+spec:
+  ports:
+  - name: https
+    port: 3000
+  selector:
+    role: pingaccess
+    tier: engine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    role: pingaccess
+    tier: console
+  name: pingaccess-admin
+spec:
+  ports:
+  - name: console
+    port: 9000
+  - name: cluster
+    port: 9090
+  selector:
+    role: pingaccess
+    tier: console
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    role: pingaccess
+    tier: engine
+  name: pingaccess
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: pingaccess
+      tier: engine
+  template:
+    metadata:
+      labels:
+        role: pingaccess
+        tier: engine
+      name: pingaccess
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: pingaccess-engine-environment-variables
+        - secretRef:
+            name: devops-secret
+        image: pingidentity/pingaccess:edge
+        livenessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - /opt/liveness.sh
+          initialDelaySeconds: 100
+          periodSeconds: 30
+        name: pingaccess
+        ports:
+        - containerPort: 3000
+        readinessProbe:
+          exec:
+            command:
+            - /bin/sh
+            - -c
+            - /opt/liveness.sh
+          periodSeconds: 10
+      initContainers:
+      - command:
+        - sh
+        - -c
+        - until curl --connect-timeout 1 --silent -k https://pingaccess-admin:9000
+          ; do echo waiting for admin ; sleep 3 ; done
+        image: curlimages/curl:latest
+        name: init
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    role: pingaccess
+    tier: console
+  name: pingaccess-admin
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      role: pingaccess
+      tier: console
+  template:
+    metadata:
+      labels:
+        role: pingaccess
+        tier: console
+      name: pingaccess
+    spec:
+      containers:
+      - envFrom:
+        - configMapRef:
+            name: pingaccess-admin-environment-variables
+        - secretRef:
+            name: devops-secret
+            optional: true
+        image: pingidentity/pingaccess:edge
+        name: pingaccess-admin
+        ports:
+        - containerPort: 9000
+        - containerPort: 9090
+        resources:
+          limits:
+            cpu: "1"
+            memory: 1.5Gi
+          requests:
+            cpu: "1"
+            memory: 1.5Gi
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx-public
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  labels:
+    role: pingaccess
+    tier: engine
+  name: pingaccess
+spec:
+  rules:
+  - host: pingaccess.${PING_IDENTITY_DEVOPS_DNS_ZONE}
+    http:
+      paths:
+      - backend:
+          serviceName: pingaccess
+          servicePort: 3000
+        path: /
+  tls:
+  - hosts:
+    - pingaccess.${PING_IDENTITY_DEVOPS_DNS_ZONE}
+    secretName: tls-secret
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx-public
+    nginx.ingress.kubernetes.io/backend-protocol: HTTPS
+  labels:
+    role: pingaccess
+    tier: console
+  name: pingaccess-admin
+spec:
+  rules:
+  - host: pingaccess-admin.${PING_IDENTITY_DEVOPS_DNS_ZONE}
+    http:
+      paths:
+      - backend:
+          serviceName: pingaccess-admin
+          servicePort: 9000
+        path: /
+  tls:
+  - hosts:
+    - pingaccess-admin.${PING_IDENTITY_DEVOPS_DNS_ZONE}
+    secretName: tls-secret

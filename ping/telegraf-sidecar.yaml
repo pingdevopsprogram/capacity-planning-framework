@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: not-important
+metadata:
+  name: not-important
+spec:
+  template:
+    spec:
+      containers:
+      - name: ping-telegraf
+        image: docker.io/library/telegraf:1.9.5-alpine
+        env:
+        - name: HOSTNAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        ports:
+        - name: telegraf
+          containerPort: 9273
+        resources:
+        ## these settings will lead to ~25% cpu util 
+        ## and 38% mem util. 
+          limits:
+            cpu: 15m
+            memory: 50M
+          requests:
+            cpu: 15m
+            memory: 50M
+        volumeMounts:
+        - mountPath: /etc/telegraf
+          name: telegraf-conf
+      volumes:
+      - configMap:
+          name: telegraf-conf
+        name: telegraf-conf
+
+      

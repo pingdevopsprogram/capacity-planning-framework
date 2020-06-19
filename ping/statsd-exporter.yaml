@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: not-important
+metadata:
+  name: not-important
+spec:
+  template:
+    spec:
+      containers:
+        - name: statsd-exporter
+          image: prom/statsd-exporter:v0.14.1
+          args:
+          - "--statsd.mapping-config=/tmp/mapping/statsd-mapping.yml"
+          - "--statsd.listen-udp=:8125"
+          - "--web.listen-address=:9102"
+          ports:
+            - containerPort: 9102
+              protocol: TCP
+            - containerPort: 8125
+              protocol: UDP
+          volumeMounts:
+            - mountPath: /tmp/mapping/
+              name: statsd-mapping
+              readOnly: false
+      volumes:
+      - name: statsd-mapping
+        configMap:
+          name: statsd-mapping

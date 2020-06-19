@@ -1,0 +1,81 @@
+apiVersion: v1
+data:
+  telegraf.conf: |
+    [global_tags]
+      env = "$ENV"
+    [agent]
+      ## interval - this may be something to increase back to 1s
+      interval = "5s"
+      ## made this false to avoid conflicting collection/reporting times
+      round_interval = false
+      metric_batch_size = 10000
+      metric_buffer_limit = 10000
+      collection_jitter = "0s"
+      flush_interval = "10s"
+      debug = true
+      flush_jitter = "0s"
+      precision = ""
+      hostname = ""
+      omit_hostname = false
+    [[inputs.cpu]]
+      ## Whether to report per-cpu stats or not
+      percpu = true
+      ## Whether to report total system cpu stats or not
+      totalcpu = true
+      ## If true, collect raw CPU time metrics.
+      collect_cpu_time = false
+      ## If true, compute and report the sum of all non-idle CPU states.
+      report_active = false
+    [[inputs.mem]]
+    [[inputs.jolokia2_agent]]
+      urls = ["https://localhost:9031/jolokia"]
+      insecure_skip_verify = true
+      tagexclude = ["jolokia_agent_url"]
+    [[inputs.jolokia2_agent.metric]]
+        name  = "java_runtime"
+        mbean = "java.lang:type=Runtime"
+        paths = ["Uptime"]
+    [[inputs.jolokia2_agent.metric]]
+        name  = "java_memory"
+        mbean = "java.lang:type=Memory"
+        paths = ["HeapMemoryUsage", "NonHeapMemoryUsage", "ObjectPendingFinalizationCount"]
+    [[inputs.jolokia2_agent.metric]]
+        name     = "java_garbage_collector"
+        mbean    = "java.lang:name=*,type=GarbageCollector"
+        paths    = ["CollectionTime", "CollectionCount"]
+        tag_keys = ["name"]
+    [[inputs.jolokia2_agent.metric]]
+        name  = "java_last_garbage_collection"
+        mbean = "java.lang:name=*,type=GarbageCollector"
+        paths = ["LastGcInfo"]
+        tag_keys = ["name"]
+    [[inputs.jolokia2_agent.metric]]
+        name  = "java_threading"
+        mbean = "java.lang:type=Threading"
+        paths = ["TotalStartedThreadCount", "ThreadCount", "CurrentThreadCpuTime", "DaemonThreadCount", "PeakThreadCount"]
+    [[inputs.jolokia2_agent.metric]]
+        name  = "java_class_loading"
+        mbean = "java.lang:type=ClassLoading"
+        paths = ["LoadedClassCount", "UnloadedClassCount", "TotalLoadedClassCount"]
+    [[inputs.jolokia2_agent.metric]]
+        name     = "java_memory_pool"
+        mbean    = "java.lang:name=*,type=MemoryPool"
+        paths    = ["Usage", "PeakUsage", "CollectionUsage"]
+        tag_keys = ["name"]
+    [[inputs.jolokia2_agent.metric]]
+        name    = "host"
+        mbean   = "pingfederate:type=*"
+        paths   = ["Count"]
+    [[inputs.jolokia2_agent.metric]]
+        name     = "jetty_connector_stats"
+        mbean    = "org.eclipse.jetty.server:context=*,id=*,type=connectorstatistics"
+        paths    = ["bytesIn","bytesOut","connections","connectionsOpen","connectionsOpenMax","connectionDurationMean","connectionDurationMax","connectionDurationStdDev","messagesOutPerConnectionMax","messagesOutPerConnectionMean","messagesOutPerConnectionStdDev","messagesOutPerSecond","messagesInPerConnectionMax","messagesInPerConnectionMean","messagesInPerConnectionStdDev","messagesInPerSecond"]
+    [[inputs.jolokia2_agent.metric]]
+        name     = "jetty_connector_resources"
+        mbean    = "com.pingidentity.appserver.jetty.server.connector:context=*,id=*,type=serverconnector"
+        paths    = ["acceptQueueSize","acceptors"]
+    [[outputs.prometheus_client]]
+      listen = ":9273"
+kind: ConfigMap
+metadata:
+  name: telegraf-conf

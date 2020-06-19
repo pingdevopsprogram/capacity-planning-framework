@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jmeter-${THREADGROUP}-${PDI}
+  namespace: ${NAMESPACE}
+spec:
+  replicas: ${REPLICAS}
+  selector:
+    matchLabels:
+      app: jmeter-${THREADGROUP}-${PDI}
+      company: PingIdentity
+  template:
+    metadata:
+      labels:
+        app: jmeter-${THREADGROUP}-${PDI}
+        company: PingIdentity
+    spec:
+      # nodeSelector:
+      #   role: perf-clients
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: failure-domain.beta.kubernetes.io/zone
+      #           operator: In
+      #           values:
+      #           - ${ZONE}
+      containers:
+      - env:
+          - name: SERVER_PROFILE_URL
+            value: ${SERVER_PROFILE_URL}
+          - name: SERVER_PROFILE_PATH
+            value: ${SERVER_PROFILE_PATH}
+          - name: STARTUP_FOREGROUND_OPTS
+            value: --nongui -t ${TEST_PATH} -JpdHost=pingdirectory-${PDI}.pingdirectory.${NAMESPACE} -JpdPort=389 -JpfHost=pingfederate.${NAMESPACE} -JpfPort=9031 -JdgHost=pingdatagovernance-${PDI}.pingdatagovernance.${NAMESPACE} -JdgPort=443 -J${THREADGROUP}ThreadCount=${THREADS} -J${THREADGROUP}Duration=10000 -JthreadCount=0 -Jramp=${RAMP} -Jduration=0 -JstartupDelay=0 -JinfluxdbHost=${INFLUXDB}
+          # - name: MAX_HEAP_SIZE
+          #   value: ${HEAP}
+        image: pingidentity/apache-jmeter:edge
+        imagePullPolicy: Always
+        name: jmeter-${THREADGROUP}
+        ports:
+        - containerPort: 1099
+          protocol: TCP
+        - containerPort: 50000
+          protocol: TCP
+        - containerPort: 9270
+          protocol: TCP
+        resources:
+          limits:
+            cpu: "${CPUS}"
+            memory: ${MEM}
+          requests:
+            cpu: "${CPUS}"
+            memory: ${MEM}
+
+---

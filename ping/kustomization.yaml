@@ -1,0 +1,171 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+## uncomment to add a specific namespace to all resources, otherwise defaults to current
+# namespace: ${PING_IDENTITY_K8S_NAMESPACE}
+
+# comment out what you don't want. 
+resources:
+- https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdataconsole
+- pingaccess
+- pingfederate
+- pingdirectory
+- pingdatagovernance
+- pingdatagovernancepap
+- statsd-mapping.yaml
+- telegraf-conf.yaml
+
+patches:
+## START: PINGDIRECTORY PATCHES
+- path: statsd-exporter.yaml
+  target:
+    name: pingdirectory
+    kind: StatefulSet
+
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 1
+  ## can change allocated storage. used for logs buildup.       
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: replace
+      path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
+      # Storage size
+      value: 10Gi
+  ## can change allocated resources. keep limits and resources equal.       
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/1/resources
+      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+
+## make heap 90% of whatever memory is set to. 
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/1/env
+      value: [{"name":"MAX_HEAP_SIZE","value": "7372m"}]
+
+- path: wait-for-directory.yaml
+  target:
+    name: pingfederate-admin
+    kind: Deployment
+
+- path: wait-for-directory.yaml
+  target:
+    name: pingdatagovernance
+    kind: Deployment
+
+## END: PINGDIRECTORY PATCHES
+
+
+## START: PINGDATAGOVERNANCE PATCHES
+
+- path: statsd-exporter.yaml
+  target:
+    name: pingdatagovernance
+    kind: Deployment
+
+- target:
+    kind: Deployment
+    name: pingdatagovernance
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 1
+  ## can change allocated resources. keep limits and resources equal.   
+- target:
+    kind: Deployment
+    name: pingdatagovernance
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/1/resources
+      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+## make heap 90% of whatever memory is set to. 
+- target:
+    kind: StatefulSet
+    name: pingdatagovernance-environment-variables
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/1/env
+      value: [{"name":"MAX_HEAP_SIZE","value": "7372m"}]
+
+## END: PINGDATAGOVERNANCE PATCHES
+
+## PINGFEDERATE
+
+- target:
+    kind: Deployment
+    name: pingfederate
+    labelSelector: tier=engine
+  patch: |-
+    - op: replace
+      path: /spec/replicas
+      value: 2
+- path: telegraf-sidecar.yaml
+  target:
+    labelSelector: tier=engine
+    name: pingfederate
+    kind: Deployment
+- target:
+    kind: Service
+    name: pingfederate
+    labelSelector: tier=engine
+  patch: |-
+    - op: add
+      path: /spec/ports/-
+      value: {"name":telegraf,"port":9273}
+  ## can change allocated resources. keep limits and resources equal.   
+- target:
+    kind: Deployment
+    name: pingfederate
+  patch: |-
+    - op: replace
+      path: /spec/template/spec/containers/1/resources
+      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+
+# configMapGenerator:
+# - name: pingaccess-environment-variables
+#   behavior: replace
+#   envs:
+#     - env_vars.pingaccess
+# - name: pingdatagovernance-environment-variables
+#   behavior: replace
+#   envs:
+#     - env_vars.pingdatagovernance
+# - name: pingdirectory-environment-variables
+#   behavior: replace
+#   envs:
+#     - env_vars.pingdirectory
+# - name: pingfederate-environment-variables
+#   behavior: replace
+#   envs: 
+#     - env_vars.pingfederate
+# - name: pingdatagovernancepap-environment-variables
+#   behavior: replace
+#   envs:
+#     - env_vars.pingdatagovernancepap
+
+images:
+- name: pingidentity/pingdirectory
+  newTag: "2005"
+- name: pingidentity/pingdatagovernance
+  newTag: "8.1.0.0-EA-edge"
+- name: pingidentity/pingfederate
+  newTag: latest
+- name: pingidentity/pingaccess
+  newTag: latest
+- name: pingidentity/pingdataconsole
+  newTag: latest
+- name: pingidentity/pingdatagovernancepap
+  newTag: latest
