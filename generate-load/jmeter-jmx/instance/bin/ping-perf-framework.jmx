@@ -1605,7 +1605,7 @@
             </elementProp>
             <elementProp name="influxdbUrl" elementType="Argument">
               <stringProp name="Argument.name">influxdbUrl</stringProp>
-              <stringProp name="Argument.value">http://${__P(influxdbHost,influx-influxdb.tick.svc.cluster.local)}:8086/write?db=${__P(writeDb,jmeter)}&amp;rp=${__P(retention,perf)}</stringProp>
+              <stringProp name="Argument.value">http://${__P(influxdbHost,influx-influxdb.tick.svc.cluster.local)}:8086/write?db=${__P(writeDb,jmeter)}&amp;rp=${__P(retention,autogen)}</stringProp>
               <stringProp name="Argument.metadata">=</stringProp>
             </elementProp>
             <elementProp name="application" elementType="Argument">
