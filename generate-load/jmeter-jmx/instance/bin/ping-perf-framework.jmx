@@ -35,7 +35,7 @@
           </elementProp>
           <elementProp name="upperUid" elementType="Argument">
             <stringProp name="Argument.name">upperUid</stringProp>
-            <stringProp name="Argument.value">${__P(upperUid,999999)}</stringProp>
+            <stringProp name="Argument.value">${__P(upperUid,1000)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="base" elementType="Argument">
