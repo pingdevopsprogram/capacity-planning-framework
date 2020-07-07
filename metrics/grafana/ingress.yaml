@@ -1,0 +1,22 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  annotations:
+    kubernetes.io/ingress.class: nginx-public
+  labels:
+    app: grafana
+  name: grafana-ingress
+  namespace: ${PING_IDENTITY_K8S_NAMESPACE}
+spec:
+  rules:
+  - host: grafana-${PING_IDENTITY_DEVOPS_DNS_ZONE}
+    http:
+      paths:
+      - backend:
+          serviceName: grafana
+          servicePort: 3000
+        path: /
+  tls:
+  - hosts:
+    - grafana-${PING_IDENTITY_DEVOPS_DNS_ZONE}
+    secretName: tls-secret

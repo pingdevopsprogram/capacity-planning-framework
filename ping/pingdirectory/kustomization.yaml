@@ -2,7 +2,7 @@ kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 
 resources:
-- https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/03-replicated-pingdirectory
+- https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdirectory
 
 # The only difference in standalone deployments vs "fullstack" (integrated) is the product configurations. 
 # here we replace standalone server-profiles ("getting-started") with "baseline" for each product
@@ -15,3 +15,13 @@ configMapGenerator:
   behavior: replace
   envs:
     - env_vars.pingdirectory
+
+
+patches:
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: add
+      path: /spec/replicas
+      value: 2

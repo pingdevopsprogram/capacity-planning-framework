@@ -35,7 +35,7 @@
           </elementProp>
           <elementProp name="upperUid" elementType="Argument">
             <stringProp name="Argument.name">upperUid</stringProp>
-            <stringProp name="Argument.value">${__P(upperUid,1000)}</stringProp>
+            <stringProp name="Argument.value">${__P(upperUid,999)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="base" elementType="Argument">
@@ -110,12 +110,13 @@
       </ConfigTestElement>
       <hashTree/>
       <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="randomStartupDelay" enabled="true">
-        <stringProp name="variableName">startupDelay</stringProp>
+        <stringProp name="variableName">randomStartupDelay</stringProp>
         <stringProp name="outputFormat"></stringProp>
-        <stringProp name="minimumValue">1</stringProp>
-        <stringProp name="maximumValue">10</stringProp>
+        <stringProp name="minimumValue">0</stringProp>
+        <stringProp name="maximumValue">1</stringProp>
         <stringProp name="randomSeed"></stringProp>
         <boolProp name="perThread">true</boolProp>
+        <stringProp name="TestPlan.comments">NOT READY/DEPRECATED</stringProp>
       </RandomVariableConfig>
       <hashTree/>
       <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="searchrateadmin" enabled="true">
@@ -130,7 +131,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(searchrateadminDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -208,7 +209,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(searchrateuserDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -286,7 +287,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(invalidsearchrateDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -364,7 +365,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(authrateDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -464,7 +465,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(authrateDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -512,7 +513,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(modrateadminDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -609,7 +610,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(modrateuserDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -698,7 +699,7 @@
         <stringProp name="ThreadGroup.ramp_time">${__P(eightytwentyadminRamp,${ramp})}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(eightytwentyadminDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
       </ThreadGroup>
       <hashTree>
         <LDAPExtSampler guiclass="LdapExtTestSamplerGui" testclass="LDAPExtSampler" testname="Bind admin" enabled="true">
@@ -840,7 +841,7 @@
         <stringProp name="ThreadGroup.ramp_time">${__P(eightytwentyuserRamp,${ramp})}</stringProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(eightytwentyuserDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
       </ThreadGroup>
       <hashTree>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random user ID" enabled="true">
@@ -1000,7 +1001,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(adddeleterateDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -1135,7 +1136,7 @@
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(comparerateDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -1199,19 +1200,19 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="jokeapi" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="dgjokeapi" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(jokeapiThreadCount,${threadCount})}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(jokeapiRamp,${ramp})}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(dgjokeapiThreadCount,${threadCount})}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(dgjokeapiRamp,${ramp})}</stringProp>
         <longProp name="ThreadGroup.start_time">1565902074000</longProp>
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(jokeapiDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(dgjokeapiDuration,${duration})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -1255,19 +1256,19 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="openbanking" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="dgopenbanking" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(openbankingThreadCount,${threadCount})}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(openbankingRamp,${ramp})}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(dgopenbankingThreadCount,${threadCount})}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(dgopenbankingRamp,${ramp})}</stringProp>
         <longProp name="ThreadGroup.start_time">1565902074000</longProp>
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(openbankingDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(dgopenbankingDuration,${duration})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -1311,19 +1312,19 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="postapi" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="dgpostapi" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(postapiThreadCount,${threadCount})}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(postapiRamp,${ramp})}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(dgpostapiThreadCount,${threadCount})}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(dgpostapiRamp,${ramp})}</stringProp>
         <longProp name="ThreadGroup.start_time">1565902074000</longProp>
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(postapiDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(dgpostapiDuration,${duration})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
         <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
@@ -1388,19 +1389,19 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="authcode" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="pfauthcode" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
           <intProp name="LoopController.loops">-1</intProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(authcodeThreadCount,${threadCount})}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(authcodeRamp,${ramp})}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(pfauthcodeThreadCount,${threadCount})}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(pfauthcodeRamp,${ramp})}</stringProp>
         <longProp name="ThreadGroup.start_time">1565902074000</longProp>
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(authcodeDuration,${duration})}</stringProp>
-        <stringProp name="ThreadGroup.delay">${__P(startupDelay,${randomStartupDelay})}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(pfauthcodeDuration,${duration})}</stringProp>
+        <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
       </ThreadGroup>
       <hashTree>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="userInt" enabled="true">
@@ -1470,7 +1471,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${pingfederate}</stringProp>
+          <stringProp name="HTTPSampler.domain">${pfHost}</stringProp>
           <stringProp name="HTTPSampler.port">${pfPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>
@@ -1545,7 +1546,7 @@
               </elementProp>
             </collectionProp>
           </elementProp>
-          <stringProp name="HTTPSampler.domain">${pingfederate}</stringProp>
+          <stringProp name="HTTPSampler.domain">${pfHost}</stringProp>
           <stringProp name="HTTPSampler.port">${pfPort}</stringProp>
           <stringProp name="HTTPSampler.protocol">https</stringProp>
           <stringProp name="HTTPSampler.contentEncoding"></stringProp>

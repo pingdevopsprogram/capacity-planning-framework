@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
   name: jmeter-${THREADGROUP}
   namespace: ${NAMESPACE}
@@ -9,7 +9,7 @@ spec:
     matchLabels:
       app: jmeter-${THREADGROUP}
       company: PingIdentity
-  serviceName: jmeter-${THREADGROUP}
+  # serviceName: jmeter-${THREADGROUP}
   template:
     metadata:
       labels:
@@ -35,7 +35,7 @@ spec:
           - name: SERVER_PROFILE_PATH
             value: ${SERVER_PROFILE_PATH}
           - name: STARTUP_FOREGROUND_OPTS
-            value: --nongui -t ${TEST_PATH} -JpdHost=pingdirectory.${NAMESPACE} -JpdPort=389 -JpfHost=pingfederate.${NAMESPACE} -JpfPort=9031 -JdgHost=pingdatagovernance.${NAMESPACE} -JdgPort=443 -J${THREADGROUP}ThreadCount=${THREADS} -J${THREADGROUP}Duration=10000 -JthreadCount=0 -Jramp=${RAMP} -Jduration=0 -JinfluxdbHost=${INFLUXDB}
+            value: --nongui -t ${TEST_PATH} ${JMETER_PROPERTIES} ${TG_JMETER_PROPERTIES} -J${THREADGROUP}ThreadCount=${THREADS} -J${THREADGROUP}Duration=10000 -JthreadCount=0 -Jramp=0 -Jduration=0
           - name: MAX_HEAP_SIZE
             value: ${HEAP}
         image: pingidentity/apache-jmeter:edge

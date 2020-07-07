@@ -1,0 +1,413 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "campaignName": "sample-campaign",
+            "serverName": "pingdatagovernance",
+            "serverCount": "3",
+            "testDuration": "50",
+            "cooldown": "20",
+            "namespace": "${PING_IDENTITY_K8S_NAMESPACE}",
+            "dashboardUrl": "https://localhost:3000/d/pingperf",
+            "serverProfileUrl": "https://github.com/pingdevopsprogram/capacity-planning-framework",
+            "serverProfilePath": "generate-load/jmeter-jmx",
+            "testPath": "/opt/out/instance/bin/ping-perf-framework.jmx",
+            "jmeterProperties": {},
+            "tests": [
+                {
+                    "id": "1tSearchrateadmin",
+                    "threadgroups": [
+                        {
+                            "name": "searchrateadmin",
+                            "jmeterProperties": {
+                                "modrateadminRamp": "3"
+                            },
+                            "vars": {
+                                "threads": "1",
+                                "replicas": "1",
+                                "heap": "1800m",
+                                "cpus": "1",
+                                "mem": "2Gi"
+                            }
+                        }
+                    ]
+                }
+            ]
+        }
+    ],
+    "required": [
+        "campaignName",
+        "testDuration",
+        "cooldown",
+        "namespace",
+        "dashboardUrl",
+        "serverProfileUrl",
+        "serverProfilePath",
+        "testPath",
+        "tests"
+    ],
+    "additionalProperties": true,
+    "properties": {
+        "campaignName": {
+            "$id": "#/properties/campaignName",
+            "type": "string",
+            "title": "Campaign Title",
+            "description": "used for organizing results",
+            "default": "",
+            "examples": [
+                "sample-campaign"
+            ]
+        },
+        "serverName": {
+            "$id": "#/properties/serverName",
+            "type": "string",
+            "title": "statefulset target for 'pure' test",
+            "description": "setting this along with serverCount intends to send traffic directly to pods",
+            "default": "",
+            "examples": [
+                "pingdatagovernance"
+            ]
+        },
+        "serverCount": {
+            "$id": "#/properties/serverCount",
+            "type": "string",
+            "title": "number of instances in statefulset target",
+            "description": "setting this along with serverName intends to send traffic directly to pods",
+            "default": "",
+            "examples": [
+                "3"
+            ]
+        },
+        "testDuration": {
+            "$id": "#/properties/testDuration",
+            "type": "string",
+            "title": "time in seconds for each test",
+            "default": "",
+            "examples": [
+                "50"
+            ]
+        },
+        "cooldown": {
+            "$id": "#/properties/cooldown",
+            "type": "string",
+            "title": "time in seconds between each test",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "20"
+            ]
+        },
+        "namespace": {
+            "$id": "#/properties/namespace",
+            "type": "string",
+            "title": "kubernetes namespace to deploy tests into",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "${PING_IDENTITY_K8S_NAMESPACE}"
+            ]
+        },
+        "dashboardUrl": {
+            "$id": "#/properties/dashboardUrl",
+            "type": "string",
+            "title": "url used when storing results",
+            "default": "",
+            "examples": [
+                "https://localhost:3000/d/pingperf"
+            ],
+            "pattern": "^https?:\\/\\/[a-z]*:?\\d{0,4}?\\/d\\/[a-z]*$"
+        },
+        "serverProfileUrl": {
+            "$id": "#/properties/serverProfileUrl",
+            "type": "string",
+            "title": "corresponds to SERVER_PROFILE_URL env var",
+            "default": "",
+            "examples": [
+                "https://github.com/pingdevopsprogram/capacity-planning-framework"
+            ]
+        },
+        "serverProfilePath": {
+            "$id": "#/properties/serverProfilePath",
+            "type": "string",
+            "title": "corresponds to SERVER_PROFILE_PATH env var",
+            "default": "",
+            "examples": [
+                "generate-load/jmeter-jmx"
+            ]
+        },
+        "testPath": {
+            "$id": "#/properties/testPath",
+            "type": "string",
+            "title": "The testPath schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": "",
+            "examples": [
+                "/opt/out/instance/bin/ping-perf-framework.jmx"
+            ]
+        },
+        "jmeterProperties": {
+            "$id": "#/properties/jmeterProperties",
+            "type": "object",
+            "title": "properties passed to all jmeter deployments",
+            "description": "key-values convert to command-line arguments passed to al jmeter deployments",
+            "default": {},
+            "examples": [
+                {}
+            ],
+            "required": [],
+            "additionalProperties": true,
+            "properties": {},
+            "uniqueItems": true
+        },
+        "tests": {
+            "$id": "#/properties/tests",
+            "type": "array",
+            "title": "Set of tests to run",
+            "default": [],
+            "examples": [
+                [
+                    {
+                        "id": "1tSearchrateadmin",
+                        "threadgroups": [
+                            {
+                                "name": "searchrateadmin",
+                                "jmeterProperties": {
+                                    "modrateadminRamp": "3"
+                                },
+                                "vars": {
+                                    "threads": "1",
+                                    "replicas": "1",
+                                    "heap": "1800m",
+                                    "cpus": "1",
+                                    "mem": "2Gi"
+                                }
+                            }
+                        ]
+                    }
+                ]
+            ],
+            "additionalItems": true,
+            "items": {
+                "anyOf": [
+                    {
+                        "$id": "#/properties/tests/items/anyOf/0",
+                        "type": "object",
+                        "default": {},
+                        "examples": [
+                            {
+                                "id": "1tSearchrateadmin",
+                                "threadgroups": [
+                                    {
+                                        "name": "searchrateadmin",
+                                        "jmeterProperties": {
+                                            "modrateadminRamp": "3"
+                                        },
+                                        "vars": {
+                                            "threads": "1",
+                                            "replicas": "1",
+                                            "heap": "1800m",
+                                            "cpus": "1",
+                                            "mem": "2Gi"
+                                        }
+                                    }
+                                ]
+                            }
+                        ],
+                        "required": [
+                            "id",
+                            "threadgroups"
+                        ],
+                        "additionalProperties": true,
+                        "properties": {
+                            "id": {
+                                "$id": "#/properties/tests/items/anyOf/0/properties/id",
+                                "type": "string",
+                                "title": "title for one test",
+                                "default": "",
+                                "examples": [
+                                    "1tSearchrateadmin"
+                                ]
+                            },
+                            "threadgroups": {
+                                "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups",
+                                "type": "array",
+                                "title": "set of deployments to run during one test",
+                                "default": [],
+                                "examples": [
+                                    [
+                                        {
+                                            "name": "searchrateadmin",
+                                            "jmeterProperties": {
+                                                "modrateadminRamp": "3"
+                                            },
+                                            "vars": {
+                                                "threads": "1",
+                                                "replicas": "1",
+                                                "heap": "1800m",
+                                                "cpus": "1",
+                                                "mem": "2Gi"
+                                            }
+                                        }
+                                    ]
+                                ],
+                                "additionalItems": true,
+                                "items": {
+                                    "anyOf": [
+                                        {
+                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0",
+                                            "type": "object",
+                                            "title": "The first anyOf schema",
+                                            "description": "An explanation about the purpose of this instance.",
+                                            "default": {},
+                                            "examples": [
+                                                {
+                                                    "name": "searchrateadmin",
+                                                    "jmeterProperties": {
+                                                        "modrateadminRamp": "3"
+                                                    },
+                                                    "vars": {
+                                                        "threads": "1",
+                                                        "replicas": "1",
+                                                        "heap": "1800m",
+                                                        "cpus": "1",
+                                                        "mem": "2Gi"
+                                                    }
+                                                }
+                                            ],
+                                            "required": [
+                                                "name",
+                                                "vars"
+                                            ],
+                                            "additionalProperties": true,
+                                            "properties": {
+                                                "name": {
+                                                    "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/name",
+                                                    "type": "string",
+                                                    "title": "threadgroup from jmeter jmx",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": "",
+                                                    "examples": [
+                                                        "searchrateadmin"
+                                                    ]
+                                                },
+                                                "jmeterProperties": {
+                                                    "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/jmeterProperties",
+                                                    "type": "object",
+                                                    "title": "key-values specific to one threadgroup",
+                                                    "description": "properties only passed on one jmeter deployment",
+                                                    "default": {},
+                                                    "examples": [
+                                                        {
+                                                            "modrateadminRamp": "3"
+                                                        }
+                                                    ],
+                                                    "required": [],
+                                                    "additionalProperties": true,
+                                                    "properties": {
+                                                        "modrateadminRamp": {
+                                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/jmeterProperties/properties/modrateadminRamp",
+                                                            "type": "string",
+                                                            "title": "sample jmeter property",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "3"
+                                                            ]
+                                                        }
+                                                    },
+                                                    "uniqueItems": true
+                                                },
+                                                "vars": {
+                                                    "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/vars",
+                                                    "type": "object",
+                                                    "title": "The vars schema",
+                                                    "description": "An explanation about the purpose of this instance.",
+                                                    "default": {},
+                                                    "examples": [
+                                                        {
+                                                            "threads": "1",
+                                                            "replicas": "1",
+                                                            "heap": "1800m",
+                                                            "cpus": "1",
+                                                            "mem": "2Gi"
+                                                        }
+                                                    ],
+                                                    "required": [
+                                                        "threads",
+                                                        "replicas",
+                                                        "heap",
+                                                        "cpus",
+                                                        "mem"
+                                                    ],
+                                                    "additionalProperties": true,
+                                                    "properties": {
+                                                        "threads": {
+                                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/vars/properties/threads",
+                                                            "type": "string",
+                                                            "title": "The threads schema",
+                                                            "description": "An explanation about the purpose of this instance.",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "1"
+                                                            ]
+                                                        },
+                                                        "replicas": {
+                                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/vars/properties/replicas",
+                                                            "type": "string",
+                                                            "title": "instances of jmeter",
+                                                            "description": "multiplied by serverCount if available",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "1"
+                                                            ]
+                                                        },
+                                                        "heap": {
+                                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/vars/properties/heap",
+                                                            "type": "string",
+                                                            "title": "heap size for jmeter",
+                                                            "description": "set to 90% of allocated memory",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "1800m"
+                                                            ]
+                                                        },
+                                                        "cpus": {
+                                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/vars/properties/cpus",
+                                                            "type": "string",
+                                                            "title": "cpus per jmeter",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "1"
+                                                            ]
+                                                        },
+                                                        "mem": {
+                                                            "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items/anyOf/0/properties/vars/properties/mem",
+                                                            "type": "string",
+                                                            "title": "mem per jmeter",
+                                                            "description": "An explanation about the purpose of this instance.",
+                                                            "default": "",
+                                                            "examples": [
+                                                                "2Gi"
+                                                            ],
+                                                            "pattern": ".*Gi"
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    ],
+                                    "$id": "#/properties/tests/items/anyOf/0/properties/threadgroups/items"
+                                }
+                            }
+                        }
+                    }
+                ],
+                "$id": "#/properties/tests/items"
+            }
+        }
+    }
+}

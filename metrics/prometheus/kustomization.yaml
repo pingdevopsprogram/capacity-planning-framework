@@ -1,0 +1,35 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+resources:
+- prometheus.yaml
+# # Uncomment for ingress
+# - ingress.yaml
+
+# # Uncomment for persistence
+# - persistence-pvc.yaml
+
+# # Uncomment for persistence
+# patchesStrategicMerge:
+#   - persistence-patch.yaml
+
+# ## Uncomment and edit to change data retention
+# patches:
+#   - target:
+#       group: apps
+#       version: v1
+#       kind: Deployment
+#       name: prometheus
+#     patch: |-
+#       - op: add
+#         path: /spec/template/spec/containers/0/args/-
+#         value: --storage.tsdb.retention.size=10GB
+#   - target:
+#       group: apps
+#       version: v1
+#       kind: Deployment
+#       name: prometheus
+#     patch: |-
+#       - op: add
+#         path: /spec/template/spec/containers/0/args/-
+#         value: --storage.tsdb.retention.time=30d

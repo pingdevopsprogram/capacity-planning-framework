@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: upstream-api
+  labels:
+    app: upstream-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: upstream-api
+  template:
+    metadata:
+      labels:
+        app: upstream-api
+    spec:
+      # affinity:
+      #   nodeAffinity:
+      #     requiredDuringSchedulingIgnoredDuringExecution:
+      #       nodeSelectorTerms:
+      #       - matchExpressions:
+      #         - key: failure-domain.beta.kubernetes.io/zone
+      #           operator: In
+      #           values:
+      #           - us-east-2b
+      containers:
+      - name: upstream-api
+        image: samirgandhi/dg-qa-upstream-api
+        ports:
+        - containerPort: 3000
+        resources:
+          limits:
+            cpu: "1"
+            memory: 2Gi
+          requests:
+            cpu: "1"
+            memory: 2Gi
+
+--- 
+
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    role: upstream-api
+  name: upstream-api
+spec:
+  ports:
+  - name: http
+    port: 3000
+  # - name: https
+  #   port: 443
+  selector:
+    app: upstream-api

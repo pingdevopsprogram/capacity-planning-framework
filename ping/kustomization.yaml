@@ -2,42 +2,43 @@ kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 
 ## uncomment to add a specific namespace to all resources, otherwise defaults to current
-# namespace: ${PING_IDENTITY_K8S_NAMESPACE}
+namespace: ${PING_IDENTITY_K8S_NAMESPACE}
 
 # comment out what you don't want. 
 resources:
-- https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdataconsole
-- pingaccess
 - pingfederate
 - pingdirectory
+- https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdataconsole
 - pingdatagovernance
-- pingdatagovernancepap
+# - pingdatagovernancepap
+
+# ## Always leave these UNcommented
 - statsd-mapping.yaml
 - telegraf-conf.yaml
 
 patches:
-## START: PINGDIRECTORY PATCHES
+# START: PINGDIRECTORY PATCHES
 - path: statsd-exporter.yaml
   target:
     name: pingdirectory
     kind: StatefulSet
-
+  ## Choose number of instances
 - target:
     kind: StatefulSet
     name: pingdirectory
   patch: |-
     - op: replace
       path: /spec/replicas
-      value: 1
-  ## can change allocated storage. used for logs buildup.       
+      value: 2
+
 - target:
-    kind: StatefulSet
+    kind: Service
     name: pingdirectory
   patch: |-
-    - op: replace
-      path: /spec/volumeClaimTemplates/0/spec/resources/requests/storage
-      # Storage size
-      value: 10Gi
+    - op: add
+      path: /spec/ports/-
+      value: {"name":metrics,"port":9102}
+
   ## can change allocated resources. keep limits and resources equal.       
 - target:
     kind: StatefulSet
@@ -45,7 +46,33 @@ patches:
   patch: |-
     - op: replace
       path: /spec/template/spec/containers/1/resources
-      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+      value: {"limits":{"cpu":"2","memory":"4Gi"},"requests":{"cpu":"2","memory":"4Gi"}}
+    
+# ## START: uncomment for PD persistence
+# - target:
+#     kind: StatefulSet
+#     name: pingdirectory
+#   patch: |-
+#     - op: add
+#       path: /spec/template/spec/containers/0/volumeMounts
+#       value: [{"name":"out-dir","mountPath":"/opt/out"}]
+# - target:
+#     kind: StatefulSet
+#     name: pingdirectory
+#   patch: |-
+#     - op: add
+#       path: /spec/volumeClaimTemplates
+#     ## change  {"storage":"5Gi"}} to preferred storage per instance
+#       value: [{"metadata":{"name":"out-dir"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"5Gi"}},"storageClassName":"pingdirectory-gp2"}}]
+# - target:
+#     kind: StatefulSet
+#     name: pingdirectory
+#   patch: |-
+#     - op: add
+#       path: /spec/template/spec/volumes
+#       value: [{"name":"out-dir","persistentVolumeClaim":{"claimName":"out-dir"}}]      
+
+# ## End: uncomment for PD persistence      
 
 ## make heap 90% of whatever memory is set to. 
 - target:
@@ -69,13 +96,19 @@ patches:
 ## END: PINGDIRECTORY PATCHES
 
 
-## START: PINGDATAGOVERNANCE PATCHES
+# ## START: PINGDATAGOVERNANCE PATCHES
 
 - path: statsd-exporter.yaml
   target:
     name: pingdatagovernance
     kind: Deployment
-
+- target:
+    kind: Service
+    name: pingdatagovernance
+  patch: |-
+    - op: add
+      path: /spec/ports/-
+      value: {"name":metrics,"port":9102}
 - target:
     kind: Deployment
     name: pingdatagovernance
@@ -90,7 +123,7 @@ patches:
   patch: |-
     - op: replace
       path: /spec/template/spec/containers/1/resources
-      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+      value: {"limits":{"cpu":"1.5","memory":"2Gi"},"requests":{"cpu":"1.5","memory":"2Gi"}}
 ## make heap 90% of whatever memory is set to. 
 - target:
     kind: StatefulSet
@@ -98,11 +131,11 @@ patches:
   patch: |-
     - op: replace
       path: /spec/template/spec/containers/1/env
-      value: [{"name":"MAX_HEAP_SIZE","value": "7372m"}]
+      value: [{"name":"MAX_HEAP_SIZE","value": "1800m"}]
 
 ## END: PINGDATAGOVERNANCE PATCHES
 
-## PINGFEDERATE
+# ## START: PINGFEDERATE PATCHES
 
 - target:
     kind: Deployment
@@ -132,40 +165,19 @@ patches:
   patch: |-
     - op: replace
       path: /spec/template/spec/containers/1/resources
-      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
-
-# configMapGenerator:
-# - name: pingaccess-environment-variables
-#   behavior: replace
-#   envs:
-#     - env_vars.pingaccess
-# - name: pingdatagovernance-environment-variables
-#   behavior: replace
-#   envs:
-#     - env_vars.pingdatagovernance
-# - name: pingdirectory-environment-variables
-#   behavior: replace
-#   envs:
-#     - env_vars.pingdirectory
-# - name: pingfederate-environment-variables
-#   behavior: replace
-#   envs: 
-#     - env_vars.pingfederate
-# - name: pingdatagovernancepap-environment-variables
-#   behavior: replace
-#   envs:
-#     - env_vars.pingdatagovernancepap
+      value: {"limits":{"cpu":"1","memory":"2Gi"},"requests":{"cpu":"1","memory":"2Gi"}}
+# ## START: PINGFEDERATE PATCHES      
 
 images:
 - name: pingidentity/pingdirectory
-  newTag: "2005"
+  newTag: "edge"
 - name: pingidentity/pingdatagovernance
-  newTag: "8.1.0.0-EA-edge"
+  newTag: "edge"
 - name: pingidentity/pingfederate
-  newTag: latest
+  newTag: edge
 - name: pingidentity/pingaccess
-  newTag: latest
+  newTag: edge
 - name: pingidentity/pingdataconsole
-  newTag: latest
+  newTag: edge
 - name: pingidentity/pingdatagovernancepap
-  newTag: latest
+  newTag: edge

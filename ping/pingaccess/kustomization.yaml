@@ -1,9 +1,0 @@
-kind: Kustomization
-apiVersion: kustomize.config.k8s.io/v1beta1
-
-resources:
-- https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/04-clustered-pingaccess
-- ingress.yaml
-
-commonLabels:
-  role: pingaccess

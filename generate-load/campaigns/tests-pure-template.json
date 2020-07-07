@@ -1,0 +1,151 @@
+{ "serverName":"pingdatagovernance",
+  "serverCount": "3",
+  "campaignName":"pdg-direct",
+  "testDuration":"50",
+  "cooldown": "20",
+  "namespace":"$PING_IDENTITY_K8S_NAMESPACE",
+  "dashboardUrl": "https://soak-monitoring.ping-devops.com/d/pingperf",
+  "serverProfileUrl":"https://github.com/ping-devops-program/anydevops",
+  "serverProfilePath":"performance-test-framework/profiles/jmeter",
+  "testPath":"/opt/out/instance/bin/ping-perf-framework.jmx",
+  "jmeterProperties":
+    { "pdHost": "pingdirectory.${PING_IDENTITY_K8S_NAMESPACE}",
+      "pdPort": "389",
+      "pfHost": "pingfederate",
+      "pfPort": "9031",
+      "dgHost": "pingdatagovernance",
+      "dgPort": "443",
+      "paHost": "pingaccess",
+      "paPort": "3000",
+      "influxdbHost":"influx-influxdb",
+      "upperUid": "999"
+    },
+  "tests":[
+    { "id": "1thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "1",
+              "replicas": "1",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "3thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "3",
+              "replicas": "1",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "6thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "6",
+              "replicas": "1",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "12thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "12",
+              "replicas": "1",
+              "ramp":"5",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "24thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "12",
+              "replicas": "2",
+              "ramp":"5",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "48thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "12",
+              "replicas": "4",
+              "ramp":"5",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "96thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "24",
+              "replicas": "4",
+              "ramp":"10",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "192thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "vars":
+            { "threads": "48",
+              "replicas": "4",
+              "ramp":"20",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    },
+    { "id": "384thread",
+      "threadgroups": [
+        { "name":"openbanking",
+          "jmeterProperties":
+          { "openbankingRamp":"3"
+          },
+          "vars":
+            { "threads": "48",
+              "replicas": "8",
+              "ramp":"20",
+              "heap": "3600m",
+              "cpus": "2",
+              "mem": "4Gi"
+            }
+        }
+      ]
+    }
+  ]
+}

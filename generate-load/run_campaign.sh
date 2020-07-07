@@ -12,6 +12,14 @@ get_abs_filename() {
     echo "$(cd "${parentdir}" && pwd)/$(basename "${filename}")"
   fi
 }
+RED_COLOR='\033[0;31m'
+GREEN_COLOR='\033[0;32m'
+YELLOW_COLOR='\033[0;33m'
+NORMAL_COLOR='\033[0m'
+echo_yellow ()
+{
+    echo "${YELLOW_COLOR}$*${NORMAL_COLOR}"
+}
 
 usage ()
 {
@@ -31,7 +39,7 @@ END_USAGE
 }
 exit_usage()
 {
-    echo "$*"
+    echo "${RED_COLOR}$*${NORMAL_COLOR}"
     usage
     exit 1
 }
@@ -71,10 +79,33 @@ test -z "${resultsFile}" && mkdir -p results && touch "${resultsFile}"
 
 echo "results will be found at: ${resultsFile}"
 
+get_jmProps(){
+  if test "$(echo "$testsJson" | jq -r "${1}")" != null; then
+    keys=$(echo "$testsJson" | jq -r "${1} | keys | .[]")
+    allJmProps=""
+    for key in $keys ; do
+      jmProp="-J"
+      value=$(echo "$testsJson" | jq -r "$1.$key")
+      jmProp="${jmProp}${key}=${value}"
+      allJmProps="${allJmProps} ${jmProp}"
+      keyCount=$((keyCount+1))
+    done
+    echo "${allJmProps}"
+  fi
+}
+validateJsonSchema(){
+  test ! "$(command -v jsonschema)" && echo_yellow "INFO: install \`jsonschema\` with \`pip install jsonschema\` to validate campaign schema." && return 0
+  echo "$testsJson" > "tmp.json"
+  jsonschema -i tmp.json campaign.json.schema
+  test $? -ne 0 && rm tmp.json && exit_usage "campaign json file is invalid"
+  rm tmp.json
+}
+
 prep_campaign(){
   # echo "prepping campaign"
   # Set test-wide vars for script
   testsJson=$(envsubst < "$campaignFile")
+  validateJsonSchema
   testDuration=$(echo "${testsJson}" | jq -r '.testDuration')
   cooldown=$(echo "${testsJson}" | jq -r '.cooldown')
   snapName=$(echo "${testsJson}" | jq -r '.campaignName')
@@ -83,8 +114,9 @@ prep_campaign(){
   numTests=$(echo "${testsJson}" | jq -r '.tests | length')
   echo "number of tests to run: $numTests"
   testIterations=$((numTests -1))
-  
+
   ## Set test-wide vars for yaml
+  JMETER_PROPERTIES="$(get_jmProps .jmeterProperties)"
   SERVER_PROFILE_URL=$(echo "${testsJson}" | jq -r ".serverProfileUrl")
   SERVER_PROFILE_PATH=$(echo "${testsJson}" | jq -r ".serverProfilePath")
   TEST_PATH=$(echo "${testsJson}" | jq -r ".testPath")
@@ -93,41 +125,46 @@ prep_campaign(){
   SERVERNAME=$(echo "${testsJson}" | jq -r ".serverName")
   INFLUXDB=$(echo "${testsJson}" | jq -r ".influxdbHost")
 
-  export NAMESPACE DURATION SERVERNAME SERVER_PROFILE_URL SERVER_PROFILE_PATH TEST_PATH INFLUXDB
+  export JMETER_PROPERTIES NAMESPACE DURATION SERVERNAME SERVER_PROFILE_URL SERVER_PROFILE_PATH TEST_PATH INFLUXDB 
 }
 run_campaign(){
-  set -x
+  #TODO: why it 
   test ! -d "yamls/tmp" && exit_usage "\n ERROR: please run from the directory this script is in \n"
   echo "clean leftovers"
   for f in yamls/tmp/* ; do 
     if test -f "${f}" ; then
-      kubectl delete -f "${f}" --force --grace-period=0
+      kubectl delete -f "${f}" --force --grace-period=0 > /dev/null 2>&1
       rm "${f}"
     fi
   done
-  set +x
   for i in $(seq 0 "${testIterations}"); do 
     numThreadGroups=$(echo "${testsJson}" | jq ".tests[$i].threadgroups | length")
-    testId=$(echo "${testsJson}" | jq -r ".tests[$i].id")
+    testId="$(echo "${testsJson}" | jq -r ".tests[$i].id")"
     tgIterations=$((numThreadGroups -1))
     for tg in $(seq 0 "${tgIterations}"); do 
-      thisTg=$(echo "${testsJson}" | jq -r ".tests[$i].threadgroups[$tg]")
+      thisTg="$(echo "${testsJson}" | jq -r ".tests[$i].threadgroups[$tg]")"
+      unset TG_JMETER_PROPERTIES
+      TG_JMETER_PROPERTIES="$(get_jmProps .tests[$i].threadgroups[$tg].jmeterProperties)"
       THREADGROUP=$(echo "${thisTg}" | jq -r ".name")
       THREADS=$(echo "${thisTg}" | jq -r ".vars.threads") 
       REPLICAS=$(echo "${thisTg}" | jq -r ".vars.replicas") 
       HEAP=$(echo "${thisTg}" | jq -r ".vars.heap") 
       CPUS=$(echo "${thisTg}" | jq -r ".vars.cpus") 
       MEM=$(echo "${thisTg}" | jq -r ".vars.mem")
-      RAMP=$(echo "${thisTg}" | jq -r ".vars.ramp")
-      test "${RAMP}" = "null" && RAMP=0
-      PURE=$(echo "${thisTg}" | jq -r ".vars.pure")
-      export THREADGROUP THREADS REPLICAS HEAP CPUS MEM RAMP
+      # deprecated. default ramp set to 0
+      # use jmeterProperties in threadgroup
+      # RAMP=$(echo "${thisTg}" | jq -r ".vars.ramp")
+      # test "${RAMP}" = "null" && RAMP=0
+      # TODO: add random ramp possibility
+      # deprecated
+      # PURE=$(echo "${thisTg}" | jq -r ".vars.pure")
+      export TG_JMETER_PROPERTIES THREADGROUP THREADS REPLICAS HEAP CPUS MEM RAMP
 
       test ! -f "yamls/tmp/test-${i}.yaml" && touch "yamls/tmp/test-${i}.yaml"
       testFile="yamls/tmp/test-${i}.yaml"
       
-      if test "${PURE}" = "true" ; then
-        numServer=$(echo "${testsJson}" | jq -r '.serverCount')
+      numServer="$(echo "${testsJson}" | jq -r '.serverCount')"
+      if test "${numServer}" != null ; then
         serverIterations=$((numServer -1))
         for pd in $(seq 0 "${serverIterations}"); do
           PDI="$pd"
@@ -142,7 +179,7 @@ run_campaign(){
                   ZONE="us-east-2c" ;;
               esac
               export ZONE
-          if test "${HEAP}" = "none" ;then
+          if test "${HEAP}" = "null" ;then
             templateFile=yamls/xrate-pure-heapless.yaml.subst
             else
             templateFile=yamls/xrate-pure.yaml.subst
@@ -150,7 +187,7 @@ run_campaign(){
           envsubst < "${templateFile}" >> "${testFile}"
         done
       else 
-          if test "${HEAP}" = "none" ;then
+          if test "${HEAP}" = "null" ;then
             templateFile=yamls/xrate-heapless.yaml.subst
             else
             templateFile=yamls/xrate.yaml.subst
@@ -168,7 +205,7 @@ run_campaign(){
     test "${?}" -ne 0 && startEpoch=$(date -d "${startTime}" +%s000)
     
     echo "test-$testId on: ${testFile} start time ${startTime}"
-    kubectl apply -f "${testFile}"
+    # kubectl apply -f "${testFile}"
       echo "letting test run ${testDuration}s"
       sleep "${testDuration}"
 

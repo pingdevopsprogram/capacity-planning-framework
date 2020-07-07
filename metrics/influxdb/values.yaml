@@ -11,13 +11,25 @@ image:
   repository: "influxdb"
   tag: "1.8"
   pullPolicy: IfNotPresent
-  ## If specified, use these secrets to access the images
-  # pullSecrets:
-  #   - registry-secret
 
-## Customize livenessProbe and readinessProbe
-## ref: https://docs.influxdata.com/influxdb/v1.7/tools/api/#ping-http-endpoint
-##
+## Set to true, edit 'size' and 'storageClass' for persistence
+persistence:
+  enabled: false
+  storageClass: "gp2"
+  annotations:
+  accessMode: ReadWriteOnce
+  size: 2Gi
+
+## Configure resource requests and limits per instance
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+resources:
+ requests:
+   memory: 4Gi
+   cpu: "2"
+ limits:
+   memory: 4Gi
+   cpu: "2"
+
 livenessProbe:
   probePath: "/ping"
 
@@ -30,83 +42,20 @@ startupProbe:
   # failureThreshold: 6
   # periodSeconds: 5
 
-## Specify a service type
-## NodePort is default
-## ref: http://kubernetes.io/docs/user-guide/services/
-##
 service:
-  ## Add annotations to service
-  # annotations: {}
   type: ClusterIP
-  ## Add IP Cluster
-  # clusterIP: ""
-  ## Add external IPs that route to one or more cluster nodes
-  # externalIPs: []
-  ## Specify LoadBalancer IP (only allow on some cloud provider)
-  # loadBalancerIP: ""
-  ## Allow source IPs to access on service (if empty, any access allow)
-  # loadBalancerSourceRanges: []
 
-## Persist data to a persistent volume
-##
-persistence:
-  enabled: true
-  ## influxdb data Persistent Volume Storage Class
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  storageClass: "gp2"
-  annotations:
-  accessMode: ReadWriteOnce
-  size: 2Gi
 
-## Create default user through Kubernetes job
-## Defaults indicated below
-##
 setDefaultUser:
   enabled: false
-
-  ## Image of the container used for job
-  ## Default: appropriate/curl:latest
-  ##
   image: appropriate/curl:latest
-
-  ## Deadline for job so it does not retry forever.
-  ## Default: activeDeadline: 300
-  ##
   activeDeadline: 300
-
-  ## Restart policy for job
-  ## Default: OnFailure
   restartPolicy: OnFailure
-
   user:
-
-    ## The user name
-    ## Default: "admin"
     username: "administrator"
-
-    ## User password
-    ## single quotes must be escaped (\')
-    ## Default: (Randomly generated 10 characters of AlphaNum)
     password: 2FederateM0re
-
-    ## User privileges
-    ## Default: "WITH ALL PRIVILEGES"
     privileges: "WITH ALL PRIVILEGES"
 
-## Configure resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-resources:
- requests:
-   memory: 10Gi
-   cpu: "5"
- limits:
-   memory: 10Gi
-   cpu: "5"
 
 
 # Annotations to be added to InfuxDB pods
@@ -115,11 +64,10 @@ podAnnotations: {}
 # ingress:
 #   enabled: false
 #   tls: false
-#   # secretName: my-tls-cert # only needed if tls above is true
-#   hostname: influxdb.anydevops.com
+#   # secretName: tls-secret # only needed if tls above is true
+#   hostname: influxdb-${PING_IDENTITY_DEVOPS_DNS_ZONE}
 #   annotations:
-    # kubernetes.io/ingress.class: "nginx"
-    # kubernetes.io/tls-acme: "true"
+    # kubernetes.io/ingress.class: "nginx-public"
 
 ## Use an alternate scheduler, e.g. "stork".
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/

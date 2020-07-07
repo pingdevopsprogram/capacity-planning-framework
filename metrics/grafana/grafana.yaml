@@ -1,10 +1,5 @@
-
-
----
 kind: ConfigMap
 apiVersion: v1
-# edited by samir - *dashboard.json replace 'ping-cloud' with '${PING_IDENTITY_K8S_NAMESPACE}'
-# this ns isn't good either. 
 data:
   dashboard-providers.yaml: |-
     apiVersion: 1
@@ -120,76 +115,16 @@ spec:
           runAsNonRoot: false
           runAsUser: 0
         volumeMounts:
-        - mountPath: /var/lib/grafana
-          name: data
         - mountPath: /etc/grafana/provisioning/datasources
           name: grafana-datasources
           readOnly: false
         - mountPath: /etc/grafana/provisioning/dashboards
           name: grafana-dashboards
-        # - name: grafana-github-plugins
-        #   mountPath: /var/lib/grafana/plugins/grafana-compare-queries
-        #   subPath: grafana-compare-queries
-        #   readOnly: false
-        # - name: grafana-github-plugins
-        #   mountPath: /var/lib/grafana/plugins/grafana-meta-queries
-        #   subPath: grafana-meta-queries
-        #   readOnly: false
-      # initContainers:
-      # - name: init
-      #   env:
-      #     - name: SERVER_PROFILE_LIVENESS_URL
-      #       value: https://github.com/pingidentity/pingidentity-server-profiles
-      #     - name: SERVER_PROFILE_LIVENESS_PATH
-      #       value: ci-tests/simple-sleep
-      #     - name: SERVER_PROFILE_PARENT
-      #       value: LIVENESS
-      #     - name: SERVER_PROFILE_URL
-      #       value: https://github.com/AutohomeCorp/grafana-compare-queries.git
-      #     - name: STARTUP_COMMAND
-      #       value: '/opt/staging/liveness.sh'
-      #   image: pingidentity/pingtoolkit:edge
-      #   volumeMounts:
-      #     - name: grafana-github-plugins
-      #       mountPath: /opt/staging/grafana-compare-queries
-      #       readOnly: false
-      #       subPath: grafana-compare-queries
-      #     - name: grafana-github-plugins
-      #       mountPath: /opt/staging/grafana-meta-queries
-      #       readOnly: false
-      #       subPath: grafana-meta-queries
       restartPolicy: Always
       volumes:
-      - name: data
-        emptyDir: {}
       - configMap:
           name: grafana-datasources
         name: grafana-datasources
       - configMap:
           name: grafana-dashboards
         name: grafana-dashboards
-      - name: grafana-github-plugins
-        emptyDir: {}
-# ---
-# apiVersion: extensions/v1beta1
-# kind: Ingress
-# metadata:
-#   annotations:
-#     kubernetes.io/ingress.class: nginx-public
-#   labels:
-#     app: grafana
-#   name: grafana-ingress
-#   namespace: ${PING_IDENTITY_K8S_NAMESPACE}
-# spec:
-#   rules:
-#   - host: grafana-${PING_IDENTITY_DEVOPS_DNS_ZONE}
-#     http:
-#       paths:
-#       - backend:
-#           serviceName: grafana
-#           servicePort: 3000
-#         path: /
-#   tls:
-#   - hosts:
-#     - grafana-${PING_IDENTITY_DEVOPS_DNS_ZONE}
-#     secretName: tls-secret

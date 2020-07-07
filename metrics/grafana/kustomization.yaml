@@ -1,0 +1,16 @@
+kind: Kustomization
+apiVersion: kustomize.config.k8s.io/v1beta1
+
+namespace: ${PING_IDENTITY_K8S_NAMESPACE}
+
+resources:
+- grafana.yaml
+# Uncomment for ingress.
+- ingress.yaml
+
+# # Uncomment for persistence
+# - persistence-pvc.yaml
+
+# # Uncomment for persistence
+# patchesStrategicMerge:
+#   - persistence-patch.yaml
