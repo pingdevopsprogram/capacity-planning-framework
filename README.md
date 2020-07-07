@@ -1,5 +1,7 @@
 # PingIdentity Capacity Planning Framework
 
+![architecture](images/capacity-planning-framework-architecture.png)
+
 This contains a set of tools to test how PingIdentity Software in containers will handle provided use cases. 
 Once the tools are set up, you'll be able to run load tests against your Ping stack and get dashboards of data to show how well the configuration can handle the load.
 
@@ -123,14 +125,14 @@ admin/2FederateM0re
 
 The stack is prepared to use a default resource and server configuration, but allows to configure how much capacity to allocate. 
 
-![load-flow](load-flow.png)
+![load-flow](images/load-flow.png)
 
 > Note: PingAccess is not yet added to the stack. this is a placeholder
 
 1. open `./ping/kustomization.yaml` in a text editor. Decide on the products you want to use. Then comment out everything relating to the rest. But, with the baseline profile, the products have dependencies on each other based on the diagram above. PF/PDG need PD; PA needs PF. 
 As an example, if you want to test PingFederate and PingDirectory, you would comment out the other products in the resources section and everything for those products in the patches section. Leave the resources that aren't product specific
 
-![comment-out-for-pingfed](comment-for-pingfed.gif)
+![comment-out-for-pingfed](images/comment-for-pingfed.gif)
 
 2. for the products you *are* testing, look through `ping/kustomization.yaml` and edit the respective `patches` to specify the number of instances (replicas) and resources (CPU/Mem) you want. 
 
@@ -153,7 +155,7 @@ kustomize build ping | envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_
 
 ## Generate Load
 
-![generate-load](generate-load.png)
+![generate-load](images/generate-load.png)
 
 Traffic in this framework is generated with Jmeter. Similar to performance testing frameworks, with this framework you have the ability to run a sequence of various tests and load to see how your Ping stack would handle it. The tools you need are found in [generate-load](./generate-load). 
 
