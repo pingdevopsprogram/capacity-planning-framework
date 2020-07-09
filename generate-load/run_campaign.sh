@@ -205,7 +205,7 @@ run_campaign(){
     test "${?}" -ne 0 && startEpoch=$(date -d "${startTime}" +%s000)
     
     echo "test-$testId on: ${testFile} start time ${startTime}"
-    # kubectl apply -f "${testFile}"
+    kubectl apply -f "${testFile}"
       echo "letting test run ${testDuration}s"
       sleep "${testDuration}"
 
@@ -255,4 +255,4 @@ while [ $campaignIterations -gt 0 ]; do
   campaignIterations=$((campaignIterations-1))
   cIteration=$((cIteration+1))
 done
-echo "Campaign $campaignName completed:" >> "${resultsFile}"
+echo "Campaign: $campaignName completed" >> "${resultsFile}"
