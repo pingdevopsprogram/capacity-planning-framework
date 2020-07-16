@@ -1605,14 +1605,14 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">${__P(pfauthcodeLoopCount},${loopCount})}</stringProp>
+          <stringProp name="LoopController.loops">${__P(pfadminLoopCount},${loopCount})}</stringProp>
         </elementProp>
-        <stringProp name="ThreadGroup.num_threads">${__P(pfauthcodeThreadCount,${threadCount})}</stringProp>
-        <stringProp name="ThreadGroup.ramp_time">${__P(pfauthcodeRamp,${ramp})}</stringProp>
+        <stringProp name="ThreadGroup.num_threads">${__P(pfadminThreadCount,${threadCount})}</stringProp>
+        <stringProp name="ThreadGroup.ramp_time">${__P(pfadminRamp,${ramp})}</stringProp>
         <longProp name="ThreadGroup.start_time">1565902074000</longProp>
         <longProp name="ThreadGroup.end_time">1565902074000</longProp>
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
-        <stringProp name="ThreadGroup.duration">${__P(pfauthcodeDuration,${duration})}</stringProp>
+        <stringProp name="ThreadGroup.duration">${__P(pfadminDuration,${duration})}</stringProp>
         <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
       </ThreadGroup>
       <hashTree>
