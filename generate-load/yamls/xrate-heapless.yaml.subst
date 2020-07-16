@@ -24,8 +24,10 @@ spec:
             value: ${SERVER_PROFILE_URL}
           - name: SERVER_PROFILE_PATH
             value: ${SERVER_PROFILE_PATH}
+          - name: SERVER_PROFILE_BRANCH
+            value: ${SERVER_PROFILE_BRANCH}
           - name: STARTUP_FOREGROUND_OPTS
-            value: --nongui -t ${TEST_PATH} ${JMETER_PROPERTIES} ${TG_JMETER_PROPERTIES} -J${THREADGROUP}ThreadCount=${THREADS} -J${THREADGROUP}Duration=10000 -JthreadCount=0 -Jramp=0 -Jduration=0}
+            value: --nongui -t ${TEST_PATH} ${JMETER_PROPERTIES} ${TG_JMETER_PROPERTIES} -J${THREADGROUP}ThreadCount=${THREADS} -J${THREADGROUP}Duration=10000 -JthreadCount=0 -Jramp=0 -Jduration=0
           # - name: MAX_HEAP_SIZE
           #   value: ${HEAP}
         image: pingidentity/apache-jmeter:edge

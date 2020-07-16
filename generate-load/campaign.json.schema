@@ -120,7 +120,7 @@
             "examples": [
                 "https://localhost:3000/d/pingperf"
             ],
-            "pattern": "^https?:\\/\\/[a-z]*:?\\d{0,4}?\\/d\\/[a-z]*$"
+            "pattern": "^https?:\\/\\/(www\\.)?[-a-zA-Z0-9@:%._\\+~#=]{1,256}\\:?[0-9]{0,4}\\/d\\/[-a-zA-Z0-9()@:%_\\+.~#?&//=]*"
         },
         "serverProfileUrl": {
             "$id": "#/properties/serverProfileUrl",

@@ -120,7 +120,7 @@ prep_campaign(){
   SERVER_PROFILE_URL=$(echo "${testsJson}" | jq -r ".serverProfileUrl")
   SERVER_PROFILE_PATH=$(echo "${testsJson}" | jq -r ".serverProfilePath")
   SERVER_PROFILE_BRANCH=$(echo "${testsJson}" | jq -r ".serverProfileBranch")
-  test "${SERVER_PROFILE_BRANCH}" = "null" && SERVER_PROFILE_BRANCH=master
+  test "${SERVER_PROFILE_BRANCH}" = "null" && SERVER_PROFILE_BRANCH="master"
   TEST_PATH=$(echo "${testsJson}" | jq -r ".testPath")
   NAMESPACE=$(echo "${testsJson}" | jq -r ".namespace")
   DURATION=$(echo "${testsJson}" | jq -r '.testDuration')
@@ -143,6 +143,8 @@ run_campaign(){
   for i in $(seq 0 "${testIterations}"); do 
     numThreadGroups=$(echo "${testsJson}" | jq ".tests[$i].threadgroups | length")
     testId="$(echo "${testsJson}" | jq -r ".tests[$i].id")"
+    _tgDuration=$(echo "${testsJson}" | jq -r ".tests[$i].duration")
+    test "${_tgDuration}" = "null" && unset _tgDuration
     tgIterations=$((numThreadGroups -1))
     for tg in $(seq 0 "${tgIterations}"); do 
       thisTg="$(echo "${testsJson}" | jq -r ".tests[$i].threadgroups[$tg]")"
@@ -209,9 +211,14 @@ run_campaign(){
     
     echo "test-$testId on: ${testFile} start time ${startTime}"
     kubectl apply -f "${testFile}"
+    if test -n "${_tgDuration}" ; then
+      echo "letting test run ${_tgDuration}s"
+      sleep "${_tgDuration}"
+      unset _tgDuration
+    else 
       echo "letting test run ${testDuration}s"
       sleep "${testDuration}"
-
+    fi
     endTime=$(date +"%Y-%m-%dT%H:%M:%S.000Z")
     endTimeUtc=$(date -u +"%Y-%m-%dT%H:%M:%S.000Z")
     endEpoch=$(date -jf "%Y-%m-%dT%H:%M:%S.000Z" "${endTime}" +%s000)

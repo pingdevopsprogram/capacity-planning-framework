@@ -2,12 +2,12 @@
 
 ![architecture](images/capacity-planning-framework-architecture.png)
 
-This contains a set of tools to test how PingIdentity Software in containers will handle provided use cases. 
-Once the tools are set up, you'll be able to run load tests against your Ping stack and get dashboards of data to show how well the configuration can handle the load.
+This is repository of tools to test PingIdentity Software in containers will handling projected load. 
 
-It is difficult to build a framework that is both: 1. valuable and easy to use 2. completely vendor/infrastructure agnostic. As such, this documentation is based around a specific architecture for an "easy path" approach. The initial steps will deploy everything without public hostnames, and **without any persistence**. This also makes it fairly provider agnostic. 
+As an end result, you'll be able to run load tests against your Ping stack and get dashboards of data to show how well the configuration can handle the load.
+
+Note, it is difficult to build a framework that is both: 1. valuable and easy to use 2. completely vendor/infrastructure agnostic. As such, this documentation is based around a specific architecture for an "easy path" approach. The initial steps will deploy everything without public hostnames, and **without any persistence**. This makes it provider agnostic. 
 An appendix is provided for customizing to different use-cases or infrastructures. 
-
 
 The default configuration and test suite is based on the [baseline](https://github.com/pingidentity/pingidentity-server-profiles/tree/master/baseline) server-profile with layers for clustering and [monitoring](https://github.com/pingidentity/pingidentity-server-profiles/tree/master/monitoring) on top. 
 
