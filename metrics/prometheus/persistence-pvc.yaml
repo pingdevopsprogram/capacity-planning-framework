@@ -1,12 +1,22 @@
+# apiVersion: v1
+# kind: PersistentVolume
+# metadata:
+#   name: prometheus-pv
+#   labels:
+#     type: aws-ebs
+# spec: 
+#   capacity:
+#     storage: 5Gi
+---
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: prometheus-storage-claim
-  namespace: ${PING_IDENTITY_K8S_NAMESPACE}
+  namespace: tmp-pdog
 spec:
   accessModes:
     - ReadWriteOnce
   resources:
     requests:
-      storage: 2Gi
+      storage: 10Gi
   storageClassName: gp2

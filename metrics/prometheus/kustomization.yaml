@@ -2,34 +2,46 @@ kind: Kustomization
 apiVersion: kustomize.config.k8s.io/v1beta1
 
 resources:
+# ## Comment to remove persistence
+- persistence-pvc.yaml
+
 - prometheus.yaml
-# # Uncomment for ingress
-# - ingress.yaml
 
-# # Uncomment for persistence
-# - persistence-pvc.yaml
+# ##Comment to remove ingress
+- ingress.yaml
 
-# # Uncomment for persistence
-# patchesStrategicMerge:
-#   - persistence-patch.yaml
 
-# ## Uncomment and edit to change data retention
-# patches:
-#   - target:
-#       group: apps
-#       version: v1
-#       kind: Deployment
-#       name: prometheus
-#     patch: |-
-#       - op: add
-#         path: /spec/template/spec/containers/0/args/-
-#         value: --storage.tsdb.retention.size=10GB
-#   - target:
-#       group: apps
-#       version: v1
-#       kind: Deployment
-#       name: prometheus
-#     patch: |-
-#       - op: add
-#         path: /spec/template/spec/containers/0/args/-
-#         value: --storage.tsdb.retention.time=30d
+# ##Comment to remove persistence
+patchesStrategicMerge:
+  - persistence-patch.yaml
+
+# ##Uncomment and edit to change data retention
+patches:
+  - target:
+      version: v1
+      kind: PersistentVolumeClaim
+      name: prometheus-storage-claim
+# ##Choose how much storage. 
+    patch: |-
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 12Gi
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: prometheus
+# ##make retention at least 2GB smaller than storage 
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --storage.tsdb.retention.size=10GB
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: prometheus
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --storage.tsdb.retention.time=30d

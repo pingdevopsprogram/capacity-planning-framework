@@ -45,11 +45,11 @@
         }
       ]
     },
-    { "id": "1tModrateadmin",
+    { "id": "1tpfauthcode",
       "threadgroups": [
-        { "name":"modrateadmin",
+        { "name":"pfauthcode",
           "jmeterProperties":
-          { "modrateadminRamp":"3"
+          { "pfauthcodeRamp":"3"
           },
           "vars":
             { "threads": "1",

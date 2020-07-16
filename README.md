@@ -44,12 +44,19 @@ You can then tear it down when you're done.
 
 ## Contents
 
+Whilst finding your ideal capacity, this is what your flow will look like: 
+
+![framework-usage-flow](./images/framework-usage-flow.png)
+
+The various steps you will take: 
+
 - [Prepare Environment](#prepare-environment)
 - [Deploy Metrics Stack](#set-up-metrics-stack)
 - [Deploy Ping Identity Stack](#set-up-pingidentity-stack)
 - [Generate Load](#generate-load)
 - [Grafana Dashboards](#grafana-dashboards)
 - [Provided Tests]()
+- [Cleanup](#cleanup)
 - [Appendix](#appendix)
 - [Roadmap](#roadmap)
 
@@ -103,7 +110,7 @@ kustomize build metrics/prometheus | \
    envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | \
   kubectl apply -f -
 ```
-> Note, this potentially requires admin access in the cluster. If you are internal to Ping, or using one of our clusters and see a 'forbidden' error regarding 'clusterroles': as long as `kubectl get clusterrole prometheus` returns the role, you are okay. 
+> Note, this potentially requires admin access in the cluster. If you are internal to Ping, or using one of our clusters and see a 'forbidden' error regarding 'clusterroles': as long as `kubectl get clusterrole prometheus` returns the role, you are okay. Instructions for cluster admins [here]()
 
 To get to Prometheus' UI
 ```
@@ -113,6 +120,7 @@ then navigate in your browser to `http://localhost:9090
 
 ### Grafana
 
+Though it's not required, it's highly-recommended that you 
 ```
 kustomize build metrics/grafana | \
 envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | \
@@ -153,9 +161,7 @@ As an example, if you want to test PingFederate and PingDirectory, you would com
     --from-literal=PING_IDENTITY_DEVOPS_USER='<PING_IDENTITY_DEVOPS_USER>' \
     --from-literal=PING_IDENTITY_DEVOPS_KEY='<sPING_IDENTITY_DEVOPS_KEY>' 
   ```
-
-
-
+  
 4. once you're ready deploy: 
 ```
 kustomize build ping \
@@ -204,6 +210,12 @@ To validate that metrics are accurate, the dashboards aim to show the same metri
 For clarity, panel/graph titles are designed as such: <metric> - <perspective> (<source>). Example: 
 ![metric-label-explanation](./images/metric-label-explanation.png)
 
+Additionally, each of the dashboards have a set of variables at the top, you will need to edit these variables to what makes sense for your test:
+![dashboard-variables](./images/dashboard-variables.png)
+
+Namely, the namespace variable should match the namespace you are working in. 
+The server variable is defaulted to pull metrics for all servers, edit it to a product name to isolate those metrics
+
 
 ### PingIdentity Performance Dashbaord
 
@@ -212,6 +224,18 @@ For clarity, panel/graph titles are designed as such: <metric> - <perspective> (
 Least amount of metrics, works with most use cases.
 
 This dashboard focuses on resource metrics from Kubernetes and throughput metrics from Jmeter. 
+
+## Cleanup
+
+The fast and abrasive way - delete absolutely everything in the namespace:
+```
+kubectl delete pods,configmaps,secrets,jobs,cronjobs,statefulsets,deployments,persistentvolumeclaims,services,ingresses -n "$(kubectl get sa default -o jsonpath='{.metadata.namespace}')" --grace-period=0 --force --all
+```
+
+The long but clean way - Run the opposite of every command you've run. 
+1. copy any command that included `kubectl apply`.. and replace `apply` with `delete`
+2. for influxdb: `helm uninstall influx`
+
 
 ## Appendix
 This appendix is meant to help folks that try to adopt this framework into a different infrastructure. 
@@ -297,9 +321,12 @@ There is nothing specific to Ping on this install, if you already have influxdb,
 All customizations for this influxdb (persistence, CPU, memory, etc) are found in `metrics/influxdb/values.yaml`.
 edit this file before running the helm command 
 
-## Prometheus
+### Prometheus
 If you already have promethues, just pull relevant scrape configs from `metrics/prometheua
 Grafana will be pre-populated with some read-only dashboards that can be used for the tests. if you want to 
+
+#### Permissions Issues
+The default deployment creates some RBAC for Prometheus. It assumes multiple users will be using the cluster Prometheus in their own namespace. To enable this, it adds the Prometheus cluster role to all service accounts, this makes looking at cluster-wide data very easy for all namespaces and is probably frowned upon by security. 
 
 **Persistence**
 To save the metrics you collect on prometheus:
@@ -311,7 +338,7 @@ To save the metrics you collect on prometheus:
 
 Additionally if you need to edit how long data is retained on prometheus, this can be configured on the `metrics/prometheus/kustomization.yaml` in the `patches` section. Edit the args that are passed to prometheus with how much disk to use for retention and how many days.
 
-## Grafana
+### Grafana
 
 Grafana will have some dashboards built in for the framework, you cannot edit these dashboards since they are "provisioned". 
 To edit the dashboard, export the json from one and import it as a new dashboard. 
