@@ -51,11 +51,19 @@
         }
       ]
     },
+<<<<<<< HEAD
     { "id": "threadgroup-specific-properties",
       "threadgroups": [
         { "name":"pfauthcode",
           "jmeterProperties":
           { "pfadminRamp":"2"
+=======
+    { "id": "1tpfauthcode",
+      "threadgroups": [
+        { "name":"pfauthcode",
+          "jmeterProperties":
+          { "pfauthcodeRamp":"3"
+>>>>>>> b6d98894759ee1d08837e7f156f62bcde3ce62f9
           },
           "vars":
             { "threads": "1",

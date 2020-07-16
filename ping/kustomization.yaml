@@ -10,7 +10,6 @@ resources:
 - pingdirectory
 - https://github.com/pingidentity/pingidentity-devops-getting-started/20-kubernetes/01-standalone/pingdataconsole
 - pingdatagovernance
-# - pingdatagovernancepap
 
 # ## Always leave these UNcommented
 - statsd-mapping.yaml
@@ -18,10 +17,6 @@ resources:
 
 patches:
 # START: PINGDIRECTORY PATCHES
-- path: statsd-exporter.yaml
-  target:
-    name: pingdirectory
-    kind: StatefulSet
   ## Choose number of instances
 - target:
     kind: StatefulSet
@@ -29,7 +24,7 @@ patches:
   patch: |-
     - op: replace
       path: /spec/replicas
-      value: 2
+      value: 3
 
 - target:
     kind: Service
@@ -45,34 +40,34 @@ patches:
     name: pingdirectory
   patch: |-
     - op: replace
-      path: /spec/template/spec/containers/1/resources
-      value: {"limits":{"cpu":"2","memory":"4Gi"},"requests":{"cpu":"2","memory":"4Gi"}}
+      path: /spec/template/spec/containers/0/resources
+      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
     
-# ## START: uncomment for PD persistence
-# - target:
-#     kind: StatefulSet
-#     name: pingdirectory
-#   patch: |-
-#     - op: add
-#       path: /spec/template/spec/containers/0/volumeMounts
-#       value: [{"name":"out-dir","mountPath":"/opt/out"}]
-# - target:
-#     kind: StatefulSet
-#     name: pingdirectory
-#   patch: |-
-#     - op: add
-#       path: /spec/volumeClaimTemplates
-#     ## change  {"storage":"5Gi"}} to preferred storage per instance
-#       value: [{"metadata":{"name":"out-dir"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"5Gi"}},"storageClassName":"pingdirectory-gp2"}}]
-# - target:
-#     kind: StatefulSet
-#     name: pingdirectory
-#   patch: |-
-#     - op: add
-#       path: /spec/template/spec/volumes
-#       value: [{"name":"out-dir","persistentVolumeClaim":{"claimName":"out-dir"}}]      
+## START: Comment to remove persistence
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/volumeMounts
+      value: [{"name":"out-dir","mountPath":"/opt/out"}]
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+#  ## change  {"storage":"5Gi"}} to preferred storage per instance
+  patch: |-
+    - op: add
+      path: /spec/volumeClaimTemplates
+      value: [{"metadata":{"name":"out-dir"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"10Gi"}},"storageClassName":"pingdirectory-gp2"}}]
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: add
+      path: /spec/template/spec/volumes
+      value: [{"name":"out-dir","persistentVolumeClaim":{"claimName":"out-dir"}}]      
 
-# ## End: uncomment for PD persistence      
+## End: Comment to remove persistence 
 
 ## make heap 90% of whatever memory is set to. 
 - target:
@@ -80,8 +75,13 @@ patches:
     name: pingdirectory
   patch: |-
     - op: replace
-      path: /spec/template/spec/containers/1/env
+      path: /spec/template/spec/containers/0/env
       value: [{"name":"MAX_HEAP_SIZE","value": "7372m"}]
+
+- path: statsd-exporter.yaml
+  target:
+    name: pingdirectory
+    kind: StatefulSet
 
 - path: wait-for-directory.yaml
   target:
@@ -96,7 +96,7 @@ patches:
 ## END: PINGDIRECTORY PATCHES
 
 
-# ## START: PINGDATAGOVERNANCE PATCHES
+## START: PINGDATAGOVERNANCE PATCHES
 
 - path: statsd-exporter.yaml
   target:
@@ -133,9 +133,9 @@ patches:
       path: /spec/template/spec/containers/1/env
       value: [{"name":"MAX_HEAP_SIZE","value": "1800m"}]
 
-## END: PINGDATAGOVERNANCE PATCHES
+# END: PINGDATAGOVERNANCE PATCHES
 
-# ## START: PINGFEDERATE PATCHES
+## START: PINGFEDERATE PATCHES
 
 - target:
     kind: Deployment
@@ -166,7 +166,7 @@ patches:
     - op: replace
       path: /spec/template/spec/containers/1/resources
       value: {"limits":{"cpu":"1","memory":"2Gi"},"requests":{"cpu":"1","memory":"2Gi"}}
-# ## START: PINGFEDERATE PATCHES      
+## START: PINGFEDERATE PATCHES      
 
 images:
 - name: pingidentity/pingdirectory

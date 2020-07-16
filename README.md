@@ -43,13 +43,22 @@ You can then tear it down when you're done.
 
 
 ## Contents
-[Prepare Environment](#prepare-environment)
-[Deploy Tools]
-  [Metrics Stack](#set-up-metrics-stack)
-  [Ping Identity Stack](#set-up-pingidentity-stack)
-  [Generate Load](#generate-load)
-[Appendix](#appendix)
-[Roadmap](#)
+
+Whilst finding your ideal capacity, this is what your flow will look like: 
+
+![framework-usage-flow](./images/framework-usage-flow.png)
+
+The various steps you will take: 
+
+- [Prepare Environment](#prepare-environment)
+- [Deploy Metrics Stack](#set-up-metrics-stack)
+- [Deploy Ping Identity Stack](#set-up-pingidentity-stack)
+- [Generate Load](#generate-load)
+- [Grafana Dashboards](#grafana-dashboards)
+- [Provided Tests]()
+- [Cleanup](#cleanup)
+- [Appendix](#appendix)
+- [Roadmap](#roadmap)
 
 
 ## Prepare Environment
@@ -97,9 +106,11 @@ helm install influx -f metrics/influxdb/values.yaml stable/influxdb
 ### Prometheus
 
 ```
-kustomize build metrics/prometheus | envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | kubectl apply -f -
+kustomize build metrics/prometheus | \
+   envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | \
+  kubectl apply -f -
 ```
-> Note, this potentially requires admin access in the cluster. If you are internal to Ping, or using one of our clusters and see a 'forbidden' error regarding 'clusterroles': as long as `kubectl get clusterrole prometheus` returns the role, you are okay. 
+> Note, this potentially requires admin access in the cluster. If you are internal to Ping, or using one of our clusters and see a 'forbidden' error regarding 'clusterroles': as long as `kubectl get clusterrole prometheus` returns the role, you are okay. Instructions for cluster admins [here]()
 
 To get to Prometheus' UI
 ```
@@ -109,8 +120,11 @@ then navigate in your browser to `http://localhost:9090
 
 ### Grafana
 
+Though it's not required, it's highly-recommended that you 
 ```
-kustomize build metrics/grafana | envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | kubectl apply -f -
+kustomize build metrics/grafana | \
+envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | \
+kubectl apply -f -
 ```
 To get to Grafana's UI
 ```
@@ -143,14 +157,16 @@ As an example, if you want to test PingFederate and PingDirectory, you would com
   ```
   or
   ```
-  kubectl create secret generic devops --from-literal=PING_IDENTITY_DEVOPS_USER='<PING_IDENTITY_DEVOPS_USER>' --from-literal=PING_IDENTITY_DEVOPS_KEY='<sPING_IDENTITY_DEVOPS_KEY>' 
+  kubectl create secret generic devops \  
+    --from-literal=PING_IDENTITY_DEVOPS_USER='<PING_IDENTITY_DEVOPS_USER>' \
+    --from-literal=PING_IDENTITY_DEVOPS_KEY='<sPING_IDENTITY_DEVOPS_KEY>' 
   ```
-
-
-
+  
 4. once you're ready deploy: 
 ```
-kustomize build ping | envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' | kubectl apply -f -
+kustomize build ping \
+  | envsubst '${PING_IDENTITY_K8S_NAMESPACE} ${PING_IDENTITY_DEVOPS_DNS_ZONE}' \
+  | kubectl apply -f -
 ```
 
 ## Generate Load
@@ -178,6 +194,47 @@ This script will run in the foreground. If you cancel it with `ctrl+c` before it
 kubectl port-forward svc/grafana 3000:3000
 ```
 then navigate in your browser to `http://localhost:3000/d/pingperf/...`
+
+## Grafana Dashboards
+
+The dashboards that come with the deployment are described here. 
+> These dashboards cannot be edited directly. To edit, you have to export the dashboard.json and import it as a new dashboard. 
+
+Metrics included on dashboards are inherently related to the use case, so there are a variety of dashboards to focus on relevant data. But, results and metrics are dashboard agnostic. As such, when you run a test and results are populated into a file, the dashboard url is simply a concatenation of: 1. the host you provide, 2. the dashboard uid you provide, and 3. the time boundaries which the test ran within. So, if you want to see the results of your test on a different dashboard, keep the `from=<time>&to=<time>` parameters from the test and change the dasboard uid sample URL: https://<host>/d/<dashboard_uid>/pingdatagovernance-performance-test-r-w?orgId=1&from=<epoch_time>&to=<epoch_time>
+ 
+Explanations of the dashboards will go from least panels to most.
+To validate that metrics are accurate, the dashboards aim to show the same metric collected and displayed from multiple perspectives and sources.  In our scenario our metrics are made up of: 
+  - Perspectives - 1. "client" generating the traffic, and 2. the target "server" that is handling the traffic. 
+  - Sources - 1. Kubernetes (k) Resource metrics from the metrics API 2. Jmeter (j) metrics 3. Metrics collected from PingIdentity (p) products. 
+
+For clarity, panel/graph titles are designed as such: <metric> - <perspective> (<source>). Example: 
+![metric-label-explanation](./images/metric-label-explanation.png)
+
+Additionally, each of the dashboards have a set of variables at the top, you will need to edit these variables to what makes sense for your test:
+![dashboard-variables](./images/dashboard-variables.png)
+
+Namely, the namespace variable should match the namespace you are working in. 
+The server variable is defaulted to pull metrics for all servers, edit it to a product name to isolate those metrics
+
+
+### PingIdentity Performance Dashbaord
+
+![pingidentity-performance-dashboard](./images/pingidentity-performance-dashboard.png)
+
+Least amount of metrics, works with most use cases.
+
+This dashboard focuses on resource metrics from Kubernetes and throughput metrics from Jmeter. 
+
+## Cleanup
+
+The fast and abrasive way - delete absolutely everything in the namespace:
+```
+kubectl delete pods,configmaps,secrets,jobs,cronjobs,statefulsets,deployments,persistentvolumeclaims,services,ingresses -n "$(kubectl get sa default -o jsonpath='{.metadata.namespace}')" --grace-period=0 --force --all
+```
+
+The long but clean way - Run the opposite of every command you've run. 
+1. copy any command that included `kubectl apply`.. and replace `apply` with `delete`
+2. for influxdb: `helm uninstall influx`
 
 
 ## Appendix
@@ -264,9 +321,12 @@ There is nothing specific to Ping on this install, if you already have influxdb,
 All customizations for this influxdb (persistence, CPU, memory, etc) are found in `metrics/influxdb/values.yaml`.
 edit this file before running the helm command 
 
-## Prometheus
+### Prometheus
 If you already have promethues, just pull relevant scrape configs from `metrics/prometheua
 Grafana will be pre-populated with some read-only dashboards that can be used for the tests. if you want to 
+
+#### Permissions Issues
+The default deployment creates some RBAC for Prometheus. It assumes multiple users will be using the cluster Prometheus in their own namespace. To enable this, it adds the Prometheus cluster role to all service accounts, this makes looking at cluster-wide data very easy for all namespaces and is probably frowned upon by security. 
 
 **Persistence**
 To save the metrics you collect on prometheus:
@@ -278,7 +338,7 @@ To save the metrics you collect on prometheus:
 
 Additionally if you need to edit how long data is retained on prometheus, this can be configured on the `metrics/prometheus/kustomization.yaml` in the `patches` section. Edit the args that are passed to prometheus with how much disk to use for retention and how many days.
 
-## Grafana
+### Grafana
 
 Grafana will have some dashboards built in for the framework, you cannot edit these dashboards since they are "provisioned". 
 To edit the dashboard, export the json from one and import it as a new dashboard. 
@@ -395,3 +455,5 @@ List of some items that hope to be covered in future releases.
 - bulk export and import snapshots from grafana. - Helpful when you want to save your results without the infrastructure. 
 
 - PingAccess use-cases
+
+- more tests on jmx

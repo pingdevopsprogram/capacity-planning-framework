@@ -120,7 +120,11 @@ prep_campaign(){
   SERVER_PROFILE_URL=$(echo "${testsJson}" | jq -r ".serverProfileUrl")
   SERVER_PROFILE_PATH=$(echo "${testsJson}" | jq -r ".serverProfilePath")
   SERVER_PROFILE_BRANCH=$(echo "${testsJson}" | jq -r ".serverProfileBranch")
+<<<<<<< HEAD
   test "${SERVER_PROFILE_BRANCH}" = "null" && SERVER_PROFILE_BRANCH="master"
+=======
+  test "${SERVER_PROFILE_BRANCH}" = "null" && SERVER_PROFILE_BRANCH=master
+>>>>>>> b6d98894759ee1d08837e7f156f62bcde3ce62f9
   TEST_PATH=$(echo "${testsJson}" | jq -r ".testPath")
   NAMESPACE=$(echo "${testsJson}" | jq -r ".namespace")
   DURATION=$(echo "${testsJson}" | jq -r '.testDuration')
@@ -131,7 +135,8 @@ prep_campaign(){
 }
 run_campaign(){
   #TODO: why it 
-  test ! -d "yamls/tmp" && exit_usage "\n ERROR: please run from the directory this script is in \n"
+  test ! -d "yamls" && exit_usage "\n ERROR: please run from the directory this script is in \n"
+  test ! -d "yamls/tmp" && mkdir "yamls/tmp"
   echo "clean leftovers"
   for f in yamls/tmp/* ; do 
     if test -f "${f}" ; then
@@ -210,11 +215,14 @@ run_campaign(){
     
     echo "test-$testId on: ${testFile} start time ${startTime}"
     kubectl apply -f "${testFile}"
+<<<<<<< HEAD
     if test -n "${_tgDuration}" ; then
       echo "letting test run ${_tgDuration}s"
       sleep "${_tgDuration}"
       unset _tgDuration
     else 
+=======
+>>>>>>> b6d98894759ee1d08837e7f156f62bcde3ce62f9
       echo "letting test run ${testDuration}s"
       sleep "${testDuration}"
     fi
@@ -264,4 +272,4 @@ while [ $campaignIterations -gt 0 ]; do
   campaignIterations=$((campaignIterations-1))
   cIteration=$((cIteration+1))
 done
-echo "Campaign $campaignName completed:" >> "${resultsFile}"
+echo "Campaign: $campaignName completed" >> "${resultsFile}"
