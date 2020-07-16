@@ -128,7 +128,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(searchrateadminLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(searchrateadminThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(searchrateadminRamp,${ramp})}</stringProp>
@@ -206,7 +206,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(searchrateuserLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(searchrateuserThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(searchrateuserRamp,${ramp})}</stringProp>
@@ -280,11 +280,11 @@
           <hashTree/>
         </hashTree>
       </hashTree>
-      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="invalidSearchrate" enabled="true">
+      <ThreadGroup guiclass="ThreadGroupGui" testclass="ThreadGroup" testname="invalidsearchrate" enabled="true">
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(invalidsearchrateLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(invalidsearchrateThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(invalidsearchrateRamp,${ramp})}</stringProp>
@@ -362,7 +362,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(authrateLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(authrateThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(authrateRamp,${ramp})}</stringProp>
@@ -462,7 +462,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(bindrateLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(authrateThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(bindrateRamp,${ramp})}</stringProp>
@@ -510,7 +510,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(modrateadminLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(modrateadminThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(modrateadminRamp,${ramp})}</stringProp>
@@ -607,7 +607,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(modrateuserLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(modrateuserThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(modrateuserRamp,${ramp})}</stringProp>
@@ -698,7 +698,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(eightytwentyadminLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(eightytwentyadminThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(eightytwentyadminRamp,${ramp})}</stringProp>
@@ -840,7 +840,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(eightytwentyuserLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(eightytwentyuserThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(eightytwentyuserRamp,${ramp})}</stringProp>
@@ -998,7 +998,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(adddeleterateLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(adddeleterateThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(adddeleterateRamp,${ramp})}</stringProp>
@@ -1133,7 +1133,7 @@
         <stringProp name="ThreadGroup.on_sample_error">startnextloop</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(comparerateLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(comparerateThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(comparerateRamp,${ramp})}</stringProp>
@@ -1209,7 +1209,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(dgjokeapiLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(dgjokeapiThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(dgjokeapiRamp,${ramp})}</stringProp>
@@ -1265,7 +1265,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(dgopenbankingLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(dgopenbankingThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(dgopenbankingRamp,${ramp})}</stringProp>
@@ -1321,7 +1321,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(dgpostapiLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(dgpostapiThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(dgpostapiRamp,${ramp})}</stringProp>
@@ -1398,7 +1398,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <intProp name="LoopController.loops">-1</intProp>
+          <stringProp name="LoopController.loops">${__P(pfauthcodeLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(pfauthcodeThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(pfauthcodeRamp,${ramp})}</stringProp>
