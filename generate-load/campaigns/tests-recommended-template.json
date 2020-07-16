@@ -5,7 +5,6 @@
   "dashboardUrl": "https://grafana-samir.ping-devops.com/d/pingperf",
   "serverProfileUrl": "https://github.com/pingdevopsprogram/capacity-planning-framework",
   "serverProfilePath": "generate-load/jmeter-jmx",
-  "serverProfileBranch": "fanny-feedback",
   "testPath": "/opt/out/instance/bin/ping-perf-framework.jmx",
   "jmeterProperties":
     { "pdHost": "pingdirectory.${PING_IDENTITY_K8S_NAMESPACE}",
