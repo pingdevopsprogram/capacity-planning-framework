@@ -23,6 +23,11 @@
             <stringProp name="Argument.value">${__P(threadCount,1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
+          <elementProp name="loopCount" elementType="Argument">
+            <stringProp name="Argument.name">loopCount</stringProp>
+            <stringProp name="Argument.value">${__P(loopCount,-1)}</stringProp>
+            <stringProp name="Argument.metadata">=</stringProp>
+          </elementProp>
           <elementProp name="pdHost" elementType="Argument">
             <stringProp name="Argument.name">pdHost</stringProp>
             <stringProp name="Argument.value">${__P(pdHost,localhost)}</stringProp>
@@ -82,11 +87,6 @@
           <elementProp name="pfPort" elementType="Argument">
             <stringProp name="Argument.name">pfPort</stringProp>
             <stringProp name="Argument.value">${__P(pfPort,9031)}</stringProp>
-            <stringProp name="Argument.metadata">=</stringProp>
-          </elementProp>
-          <elementProp name="loopCount" elementType="Argument">
-            <stringProp name="Argument.name">loopCount</stringProp>
-            <stringProp name="Argument.value">${__P(loopCount,-1)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -1605,7 +1605,7 @@
         <stringProp name="ThreadGroup.on_sample_error">continue</stringProp>
         <elementProp name="ThreadGroup.main_controller" elementType="LoopController" guiclass="LoopControlPanel" testclass="LoopController" testname="Loop Controller" enabled="true">
           <boolProp name="LoopController.continue_forever">false</boolProp>
-          <stringProp name="LoopController.loops">${__P(pfadminLoopCount},${loopCount})}</stringProp>
+          <stringProp name="LoopController.loops">${__P(pfadminLoopCount,${loopCount})}</stringProp>
         </elementProp>
         <stringProp name="ThreadGroup.num_threads">${__P(pfadminThreadCount,${threadCount})}</stringProp>
         <stringProp name="ThreadGroup.ramp_time">${__P(pfadminRamp,${ramp})}</stringProp>
