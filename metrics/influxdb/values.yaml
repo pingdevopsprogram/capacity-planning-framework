@@ -242,6 +242,7 @@ initScripts:
   scripts:
     init.iql: |+
       CREATE DATABASE "jmeter";
+      CREATE RETENTION POLICY perf ON jmeter DURATION 14d REPLICATION 1; 
 backup:
   enabled: false
   schedule: "0 0 * * *"

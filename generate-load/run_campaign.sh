@@ -119,17 +119,20 @@ prep_campaign(){
   JMETER_PROPERTIES="$(get_jmProps .jmeterProperties)"
   SERVER_PROFILE_URL=$(echo "${testsJson}" | jq -r ".serverProfileUrl")
   SERVER_PROFILE_PATH=$(echo "${testsJson}" | jq -r ".serverProfilePath")
+  SERVER_PROFILE_BRANCH=$(echo "${testsJson}" | jq -r ".serverProfileBranch")
+  test "${SERVER_PROFILE_BRANCH}" = "null" && SERVER_PROFILE_BRANCH=master
   TEST_PATH=$(echo "${testsJson}" | jq -r ".testPath")
   NAMESPACE=$(echo "${testsJson}" | jq -r ".namespace")
   DURATION=$(echo "${testsJson}" | jq -r '.testDuration')
   SERVERNAME=$(echo "${testsJson}" | jq -r ".serverName")
   INFLUXDB=$(echo "${testsJson}" | jq -r ".influxdbHost")
 
-  export JMETER_PROPERTIES NAMESPACE DURATION SERVERNAME SERVER_PROFILE_URL SERVER_PROFILE_PATH TEST_PATH INFLUXDB 
+  export JMETER_PROPERTIES NAMESPACE DURATION SERVERNAME SERVER_PROFILE_URL SERVER_PROFILE_PATH SERVER_PROFILE_BRANCH TEST_PATH INFLUXDB 
 }
 run_campaign(){
   #TODO: why it 
-  test ! -d "yamls/tmp" && exit_usage "\n ERROR: please run from the directory this script is in \n"
+  test ! -d "yamls" && exit_usage "\n ERROR: please run from the directory this script is in \n"
+  test ! -d "yamls/tmp" && mkdir "yamls/tmp"
   echo "clean leftovers"
   for f in yamls/tmp/* ; do 
     if test -f "${f}" ; then
