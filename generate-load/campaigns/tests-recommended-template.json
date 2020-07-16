@@ -1,11 +1,12 @@
-{ "campaignName":"sample-campaign",
-  "testDuration":"50",
+{ "campaignName": "sample-campaign",
+  "testDuration": "30",
   "cooldown": "20",
-  "namespace":"${PING_IDENTITY_K8S_NAMESPACE}",
-  "dashboardUrl": "https://localhost:3000/d/pingperf",
-  "serverProfileUrl":"https://github.com/pingdevopsprogram/capacity-planning-framework",
-  "serverProfilePath":"generate-load/jmeter-jmx",
-  "testPath":"/opt/out/instance/bin/ping-perf-framework.jmx",
+  "namespace": "${PING_IDENTITY_K8S_NAMESPACE}",
+  "dashboardUrl": "https://grafana-samir.ping-devops.com/d/pingperf",
+  "serverProfileUrl": "https://github.com/pingdevopsprogram/capacity-planning-framework",
+  "serverProfilePath": "generate-load/jmeter-jmx",
+  "serverProfileBranch": "fanny-feedback",
+  "testPath": "/opt/out/instance/bin/ping-perf-framework.jmx",
   "jmeterProperties":
     { "pdHost": "pingdirectory.${PING_IDENTITY_K8S_NAMESPACE}",
       "pdPort": "389",
@@ -16,40 +17,45 @@
       "paHost": "pingaccess",
       "paPort": "3000",
       "influxdbHost":"influx-influxdb",
-      "upperUid": "999"
+      "upperUid": "999",
+      "duration": "0",
+      "ramp": "0",
+      "threadCount": "0"
     },
   "tests":[
-    { "id": "1tSearchrateadmin",
+    { "id": "regularTest",
+      "duration": "20",
       "threadgroups": [
-        { "name":"searchrateadmin",
+        { "name":"pfauthcode",
           "vars":
-          { "threads": "1",
-            "replicas": "1",
-            "heap": "1800m",
-            "cpus": "1",
-            "mem": "2Gi"
-          }
+            { "threads": "1",
+              "replicas": "1",
+              "heap": "1800m",
+              "cpus": "1",
+              "mem": "2Gi"
+            }
         }
       ]
     },
-    { "id": "1tModrateadmin",
+    { "id": "overrideDefaultDuration",
+      "duration": "20",
       "threadgroups": [
-        { "name":"modrateadmin",
+        { "name":"pfauthcode",
           "vars":
-          { "threads": "1",
-            "replicas": "1",
-            "heap": "1800m",
-            "cpus": "1",
-            "mem": "2Gi"
-          }
+            { "threads": "1",
+              "replicas": "1",
+              "heap": "1800m",
+              "cpus": "1",
+              "mem": "2Gi"
+            }
         }
       ]
     },
-    { "id": "1tModrateadmin",
+    { "id": "threadgroup-specific-properties",
       "threadgroups": [
-        { "name":"modrateadmin",
+        { "name":"pfauthcode",
           "jmeterProperties":
-          { "modrateadminRamp":"3"
+          { "pfadminRamp":"2"
           },
           "vars":
             { "threads": "1",
@@ -61,6 +67,5 @@
         }
       ]
     }
-    
   ]
 }
