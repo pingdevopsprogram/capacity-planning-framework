@@ -12,7 +12,7 @@ kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
   name: prometheus-storage-claim
-  namespace: tmp-pdog
+  namespace: ${PING_IDENTITY_K8S_NAMESPACE}
 spec:
   accessModes:
     - ReadWriteOnce
