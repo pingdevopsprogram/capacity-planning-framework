@@ -58,7 +58,7 @@ patches:
   patch: |-
     - op: add
       path: /spec/volumeClaimTemplates
-      value: [{"metadata":{"name":"out-dir"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"10Gi"}},"storageClassName":"pingdirectory-gp2"}}]
+      value: [{"metadata":{"name":"out-dir"},"spec":{"accessModes":["ReadWriteOnce"],"resources":{"requests":{"storage":"10Gi"}},"storageClassName":"gp2"}}]
 - target:
     kind: StatefulSet
     name: pingdirectory
@@ -126,8 +126,8 @@ patches:
       value: {"limits":{"cpu":"1.5","memory":"2Gi"},"requests":{"cpu":"1.5","memory":"2Gi"}}
 ## make heap 90% of whatever memory is set to. 
 - target:
-    kind: StatefulSet
-    name: pingdatagovernance-environment-variables
+    kind: Deployment
+    name: pingdatagovernance
   patch: |-
     - op: replace
       path: /spec/template/spec/containers/1/env
@@ -144,12 +144,7 @@ patches:
   patch: |-
     - op: replace
       path: /spec/replicas
-      value: 2
-- path: telegraf-sidecar.yaml
-  target:
-    labelSelector: tier=engine
-    name: pingfederate
-    kind: Deployment
+      value: 3
 - target:
     kind: Service
     name: pingfederate
@@ -162,11 +157,26 @@ patches:
 - target:
     kind: Deployment
     name: pingfederate
+    labelSelector: tier=engine
   patch: |-
     - op: replace
-      path: /spec/template/spec/containers/1/resources
-      value: {"limits":{"cpu":"1","memory":"2Gi"},"requests":{"cpu":"1","memory":"2Gi"}}
-## START: PINGFEDERATE PATCHES      
+      path: /spec/template/spec/containers/0/resources
+      value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+## make heap 90% of whatever memory is set to. 
+- target:
+    kind: Deployment
+    name: pingfederate
+    labelSelector: tier=engine
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/env
+      value: [{"name":"MAX_HEAP_SIZE","value": "7372m"}]
+- path: telegraf-sidecar.yaml
+  target:
+    labelSelector: tier=engine
+    name: pingfederate
+    kind: Deployment
+## END: PINGFEDERATE PATCHES      
 
 images:
 - name: pingidentity/pingdirectory

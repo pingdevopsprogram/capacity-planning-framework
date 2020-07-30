@@ -5,12 +5,24 @@ namespace: ${PING_IDENTITY_K8S_NAMESPACE}
 
 resources:
 - grafana.yaml
-# Uncomment for ingress.
+## Uncomment for ingress.
 - ingress.yaml
 
-# # Uncomment for persistence
-# - persistence-pvc.yaml
+## Uncomment for persistence
+- persistence-pvc.yaml
 
-# # Uncomment for persistence
-# patchesStrategicMerge:
-#   - persistence-patch.yaml
+
+## Uncomment for persistence
+patchesStrategicMerge:
+  - persistence-patch.yaml
+
+patches:
+  - target:
+      version: v1
+      kind: PersistentVolumeClaim
+      name: grafana-storage-claim
+# ##Choose how much storage. 
+    patch: |-
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: 4Gi

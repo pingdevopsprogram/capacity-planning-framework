@@ -8,11 +8,11 @@ spec:
       containers:
       - name: ping-telegraf
         image: docker.io/library/telegraf:1.9.5-alpine
-        env:
-        - name: HOSTNAME
-          valueFrom:
-            fieldRef:
-              fieldPath: spec.nodeName
+        # env:
+        # - name: HOSTNAME
+        #   valueFrom:
+        #     fieldRef:
+        #       fieldPath: spec.nodeName
         ports:
         - name: telegraf
           containerPort: 9273
