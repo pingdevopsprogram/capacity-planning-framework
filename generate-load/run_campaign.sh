@@ -110,7 +110,7 @@ prep_campaign(){
   cooldown=$(echo "${testsJson}" | jq -r '.cooldown')
   snapName=$(echo "${testsJson}" | jq -r '.campaignName')
   dashboardUrl=$(echo "${testsJson}" | jq -r '.dashboardUrl')
-  test "${dashboardUrl}" = "null" && dashboardUrl="https://soak-monitoring.ping-devops.com/d/dgperfrw"
+  test "${dashboardUrl}" = "null" && dashboardUrl="https://soak-monitoring.ping-devops.com/d/pingperf"
   numTests=$(echo "${testsJson}" | jq -r '.tests | length')
   echo "number of tests to run: $numTests"
   testIterations=$((numTests -1))
