@@ -1751,13 +1751,13 @@
               <collectionProp name="Asserion.test_strings">
                 <stringProp name="1965687765">Location</stringProp>
               </collectionProp>
-              <stringProp name="Assertion.custom_message"></stringProp>
+              <stringProp name="Assertion.custom_message">Hello from the custom failure</stringProp>
               <stringProp name="Assertion.test_field">Assertion.response_headers</stringProp>
               <boolProp name="Assertion.assume_success">false</boolProp>
               <intProp name="Assertion.test_type">2</intProp>
             </ResponseAssertion>
             <hashTree/>
-            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Access Token" enabled="true">
+            <RegexExtractor guiclass="RegexExtractorGui" testclass="RegexExtractor" testname="Extract Access Token" enabled="false">
               <stringProp name="RegexExtractor.useHeaders">true</stringProp>
               <stringProp name="RegexExtractor.refname">access_token</stringProp>
               <stringProp name="RegexExtractor.regex">access_token=(.*?)&amp;</stringProp>
