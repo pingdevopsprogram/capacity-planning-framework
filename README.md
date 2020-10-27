@@ -116,7 +116,13 @@ To get to Prometheus' UI
 ```
 kubectl port-forward svc/prometheus 9090:9090
 ```
-then navigate in your browser to `http://localhost:9090
+then navigate in your browser to `http://localhost:9090`
+
+In our examples, Prometheus looks to collect metrics from the kubernetes metrics api. An easy way to enable the metrics api is to pull it from [ping-cloud-base](https://github.com/pingidentity/ping-cloud-base/tree/v1.4-release-branch/k8s-configs/cluster-tools/metrics):
+
+```
+kustomize build https://github.com/pingidentity/ping-cloud-base/k8s-configs/cluster-tools/metrics\?ref\=v1.4-release-branch | k apply -f -
+```
 
 ### Grafana
 
