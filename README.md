@@ -99,8 +99,14 @@ These instructions will install the products with defaults we have chosen. If yo
 Deployed with helm 3. 
 InfluxDb is used to store metrics from jmeter. 
 
+First add the helm chart:
 ```
-helm install influx -f metrics/influxdb/values.yaml stable/influxdb 
+helm repo add influxdata https://helm.influxdata.com/
+```
+
+Edit the file `metrics/influxdb/values.yaml` as desired, then:
+```
+helm install influx -f metrics/influxdb/values.yaml influxdata/influxdb
 ```
 
 ### Prometheus
