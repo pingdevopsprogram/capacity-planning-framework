@@ -34,7 +34,17 @@ patches:
       path: /spec/ports/-
       value: {"name":metrics,"port":9102}
 
-  ## can change allocated resources. keep limits and resources equal.       
+  ## Support PD as non-root
+- target:
+    kind: StatefulSet
+    name: pingdirectory
+  patch: |-
+    - op: add
+      path: /spec/template/spec/securityContext
+      value: {"runAsUser": 9031,"runAsGroup": 9999,"fsGroup": 2000}
+
+
+  ## can change allocated resources. keep limits and resources equal.    
 - target:
     kind: StatefulSet
     name: pingdirectory
@@ -132,6 +142,13 @@ patches:
     - op: replace
       path: /spec/template/spec/containers/1/env
       value: [{"name":"MAX_HEAP_SIZE","value": "1800m"}]
+- target:
+    kind: Deployment
+    name: pingdatagovernance
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/1/imagePullPolicy
+      value: Always
 
 # END: PINGDATAGOVERNANCE PATCHES
 
@@ -162,6 +179,14 @@ patches:
     - op: replace
       path: /spec/template/spec/containers/0/resources
       value: {"limits":{"cpu":"4","memory":"8Gi"},"requests":{"cpu":"4","memory":"8Gi"}}
+- target:
+    kind: Deployment
+    name: pingfederate
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/imagePullPolicy
+      value: Always
+
 ## make heap 90% of whatever memory is set to. 
 - target:
     kind: Deployment
@@ -176,7 +201,21 @@ patches:
     labelSelector: tier=engine
     name: pingfederate
     kind: Deployment
-## END: PINGFEDERATE PATCHES      
+## END: PINGFEDERATE PATCHES     
+
+- target:
+    kind: StatefulSet
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/0/imagePullPolicy
+      value: Always
+- target:
+    kind: StatefulSet
+  patch: |-
+    - op: add
+      path: /spec/template/spec/containers/1/imagePullPolicy
+      value: Always
+
 
 images:
 - name: pingidentity/pingdirectory
