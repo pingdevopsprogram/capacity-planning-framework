@@ -7,7 +7,7 @@ spec:
     spec:
       containers:
       - name: ping-telegraf
-        image: docker.io/library/telegraf:1.9.5-alpine
+        image: docker.io/library/telegraf:1.18.0-alpine
         # env:
         # - name: HOSTNAME
         #   valueFrom:
