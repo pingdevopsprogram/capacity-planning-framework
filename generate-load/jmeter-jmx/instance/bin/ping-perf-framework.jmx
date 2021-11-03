@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.1 r1853635">
+<jmeterTestPlan version="1.2" properties="5.0" jmeter="5.4.1">
   <hashTree>
     <TestPlan guiclass="TestPlanGui" testclass="TestPlan" testname="Implicit" enabled="true">
       <stringProp name="TestPlan.comments"></stringProp>
@@ -31,12 +31,12 @@
           </elementProp>
           <elementProp name="pdHost" elementType="Argument">
             <stringProp name="Argument.name">pdHost</stringProp>
-            <stringProp name="Argument.value">${__P(pdHost,localhost)}</stringProp>
+            <stringProp name="Argument.value">${__P(PD_ENGINE_PRIVATE_HOSTNAME,localhost)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="pdPort" elementType="Argument">
             <stringProp name="Argument.name">pdPort</stringProp>
-            <stringProp name="Argument.value">${__P(pdPort,1389)}</stringProp>
+            <stringProp name="Argument.value">${__P(PD_ENGINE_PRIVATE_PORT_LDAP,1389)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="upperUid" elementType="Argument">
@@ -66,12 +66,12 @@
           </elementProp>
           <elementProp name="dgHost" elementType="Argument">
             <stringProp name="Argument.name">dgHost</stringProp>
-            <stringProp name="Argument.value">${__P(dgHost,localhost)}</stringProp>
+            <stringProp name="Argument.value">${__P(PAZ_ENGINE_PRIVATE_HOSTNAME,localhost)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="dgPort" elementType="Argument">
             <stringProp name="Argument.name">dgPort</stringProp>
-            <stringProp name="Argument.value">${__P(dgPort,7443)}</stringProp>
+            <stringProp name="Argument.value">${__P(PAZ_ENGINE_PRIVATE_PORT_HTTPS,7443)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="dgToken" elementType="Argument">
@@ -82,12 +82,12 @@
           </elementProp>
           <elementProp name="pfHost" elementType="Argument">
             <stringProp name="Argument.name">pfHost</stringProp>
-            <stringProp name="Argument.value">${__P(pfHost,pingfederate)}</stringProp>
+            <stringProp name="Argument.value">${__P(PF_ENGINE_PRIVATE_HOSTNAME,pingfederate)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
           <elementProp name="pfPort" elementType="Argument">
             <stringProp name="Argument.name">pfPort</stringProp>
-            <stringProp name="Argument.value">${__P(pfPort,9031)}</stringProp>
+            <stringProp name="Argument.value">${__P(PF_ENGINE_PRIVATE_PORT_HTTPS,9031)}</stringProp>
             <stringProp name="Argument.metadata">=</stringProp>
           </elementProp>
         </collectionProp>
@@ -106,6 +106,7 @@
         <stringProp name="connection_timeout">400</stringProp>
         <stringProp name="parseflag">false</stringProp>
         <stringProp name="secure">false</stringProp>
+        <stringProp name="trustall">false</stringProp>
         <stringProp name="user_dn">cn=administrator</stringProp>
         <stringProp name="user_pw">${password}</stringProp>
         <stringProp name="comparedn"></stringProp>
@@ -154,6 +155,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -190,6 +192,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -246,6 +249,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn">uid=autogen.user.${userId},${base}</stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -268,6 +272,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -310,6 +315,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -346,6 +352,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -388,6 +395,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -424,6 +432,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -448,6 +457,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn">uid=autogen.user.${validUserId},${base}</stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -497,6 +507,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn">uid=autogen.user.${validUserId},${base}</stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -536,6 +547,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn"></stringProp>
@@ -582,6 +594,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -651,6 +664,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn">uid=autogen.user.${userId},${base}</stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn"></stringProp>
@@ -674,6 +688,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn"></stringProp>
@@ -706,6 +721,7 @@
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(eightytwentyadminDuration,${duration})}</stringProp>
         <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
         <LDAPExtSampler guiclass="LdapExtTestSamplerGui" testclass="LDAPExtSampler" testname="Bind admin" enabled="true">
@@ -721,6 +737,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn"></stringProp>
@@ -768,6 +785,7 @@
               <stringProp name="connection_timeout"></stringProp>
               <stringProp name="parseflag">false</stringProp>
               <stringProp name="secure">false</stringProp>
+              <stringProp name="trustall">false</stringProp>
               <stringProp name="user_dn"></stringProp>
               <stringProp name="user_pw"></stringProp>
               <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -814,6 +832,7 @@
               <stringProp name="connection_timeout"></stringProp>
               <stringProp name="parseflag">false</stringProp>
               <stringProp name="secure">false</stringProp>
+              <stringProp name="trustall">false</stringProp>
               <stringProp name="user_dn"></stringProp>
               <stringProp name="user_pw"></stringProp>
               <stringProp name="comparedn"></stringProp>
@@ -848,6 +867,7 @@
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(eightytwentyuserDuration,${duration})}</stringProp>
         <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="Random user ID" enabled="true">
@@ -883,6 +903,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn">uid=autogen.user.${userId},${base}</stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -905,6 +926,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -950,6 +972,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn">uid=autogen.user.${userId},${base}</stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -973,6 +996,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -1024,6 +1048,7 @@
           <stringProp name="connection_timeout"></stringProp>
           <stringProp name="parseflag">false</stringProp>
           <stringProp name="secure">false</stringProp>
+          <stringProp name="trustall">false</stringProp>
           <stringProp name="user_dn"></stringProp>
           <stringProp name="user_pw"></stringProp>
           <stringProp name="comparedn">uid=autogen.user.100</stringProp>
@@ -1070,6 +1095,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -1118,6 +1144,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -1173,6 +1200,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn"></stringProp>
@@ -1195,6 +1223,7 @@
             <stringProp name="connection_timeout"></stringProp>
             <stringProp name="parseflag">false</stringProp>
             <stringProp name="secure">false</stringProp>
+            <stringProp name="trustall">false</stringProp>
             <stringProp name="user_dn"></stringProp>
             <stringProp name="user_pw"></stringProp>
             <stringProp name="comparedn">uid=autogen.user.${userId}</stringProp>
@@ -1408,6 +1437,7 @@
         <boolProp name="ThreadGroup.scheduler">true</boolProp>
         <stringProp name="ThreadGroup.duration">${__P(pfauthcodeDuration,${duration})}</stringProp>
         <stringProp name="ThreadGroup.delay">${__P(startupDelay,0)}</stringProp>
+        <boolProp name="ThreadGroup.same_user_on_next_iteration">true</boolProp>
       </ThreadGroup>
       <hashTree>
         <RandomVariableConfig guiclass="TestBeanGUI" testclass="RandomVariableConfig" testname="userInt" enabled="true">
@@ -1594,6 +1624,7 @@
                 </elementProp>
               </collectionProp>
               <boolProp name="AuthManager.clearEachIteration">true</boolProp>
+              <boolProp name="AuthManager.controlledByThreadGroup">false</boolProp>
             </AuthManager>
             <hashTree/>
             <ResponseAssertion guiclass="AssertionGui" testclass="ResponseAssertion" testname="assert" enabled="true">
@@ -1663,6 +1694,7 @@
         <CookieManager guiclass="CookiePanel" testclass="CookieManager" testname="HTTP Cookie Manager" enabled="true">
           <collectionProp name="CookieManager.cookies"/>
           <boolProp name="CookieManager.clearEachIteration">true</boolProp>
+          <boolProp name="CookieManager.controlledByThreadGroup">false</boolProp>
         </CookieManager>
         <hashTree/>
         <HTTPSamplerProxy guiclass="HttpTestSampleGui" testclass="HTTPSamplerProxy" testname="Request Identifier First Form" enabled="true">
