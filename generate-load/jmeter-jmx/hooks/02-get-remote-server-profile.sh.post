@@ -1,2 +1,2 @@
 #!/usr/bin/env sh
-env >> /opt/staging/instance/bin/user.properties
+env >> /opt/staging/instance/bin/samir.properties
